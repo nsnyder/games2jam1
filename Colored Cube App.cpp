@@ -9,6 +9,7 @@
 //=============================================================================
 
 #include "d3dApp.h"
+#include "player.h"
 #include "Box.h"
 #include "Axes.h"
 
@@ -30,6 +31,7 @@ private:
  
 private:
 	
+	Player player;
 	Box mBox;
 	Axes mAxes;
 
@@ -89,6 +91,7 @@ void ColoredCubeApp::initApp()
 
 	mBox.init(md3dDevice, 1.0f);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	player.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 }
 
 void ColoredCubeApp::onResize()
@@ -109,7 +112,7 @@ void ColoredCubeApp::updateScene(float dt)
 	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
 	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
-	// Restrict the angle mPhi.
+	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
 	if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
 
@@ -151,8 +154,11 @@ void ColoredCubeApp::drawScene()
         mTech->GetPassByIndex( p )->Apply(0);
         
 		//mBox.draw();
-
     }
+
+
+	player.draw();
+
 
 	
 

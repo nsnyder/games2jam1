@@ -94,6 +94,7 @@
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Line.cpp" />
+    <ClCompile Include="player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Axes.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Line.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
