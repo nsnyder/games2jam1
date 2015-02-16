@@ -84,8 +84,10 @@ void Line::draw()
 
 void Line::setColor(D3DXCOLOR c1, D3DXCOLOR c2)
 {
+	ReleaseCOM(mVB);
+
 	// Create vertex buffer
-	
+
     Vertex vertices[] =
     {
 		{D3DXVECTOR3(+0.0f, +0.0f, +0.0f), c1},
@@ -104,26 +106,12 @@ void Line::setColor(D3DXCOLOR c1, D3DXCOLOR c2)
     vinitData.pSysMem = vertices;
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB));
 
-
-	// Create the index buffer
-
-	DWORD indices[] = {
-		// It's a freakin' line man
-		0, 1
-	};
-
-	D3D10_BUFFER_DESC ibd;
-    ibd.Usage = D3D10_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(DWORD) * mNumFaces * 2;
-    ibd.BindFlags = D3D10_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
-    D3D10_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = indices;
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mIB));
 }
 void Line::setColor(D3DXCOLOR c)
 {
+
+	ReleaseCOM(mVB);
+
 	// Create vertex buffer
 	
     Vertex vertices[] =
@@ -144,21 +132,4 @@ void Line::setColor(D3DXCOLOR c)
     vinitData.pSysMem = vertices;
     HR(md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB));
 
-
-	// Create the index buffer
-
-	DWORD indices[] = {
-		// It's a freakin' line man
-		0, 1
-	};
-
-	D3D10_BUFFER_DESC ibd;
-    ibd.Usage = D3D10_USAGE_IMMUTABLE;
-    ibd.ByteWidth = sizeof(DWORD) * mNumFaces * 2;
-    ibd.BindFlags = D3D10_BIND_INDEX_BUFFER;
-    ibd.CPUAccessFlags = 0;
-    ibd.MiscFlags = 0;
-    D3D10_SUBRESOURCE_DATA iinitData;
-    iinitData.pSysMem = indices;
-    HR(md3dDevice->CreateBuffer(&ibd, &iinitData, &mIB));
 }
