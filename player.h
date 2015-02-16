@@ -26,6 +26,14 @@ public:
 	float getX(){ return x; }
 	float getY(){ return y; }
 	float getZ(){ return z; }
+	float getTurnSpeed() { return turnSpeed; }
+	float getScale() { return scale; }
+
+	void setX(float X){x = X;}
+	void setY(float Y){y = Y;}
+	void setZ(float Z){z = Z;}
+	void setTurnSpeed(float ts){ turnSpeed = ts; }
+	void setScale(float sc){ scale = sc; }
 
 private:
 	ID3D10Device* md3dDevice;
@@ -38,6 +46,8 @@ private:
 	float x;
 	float y;
 	float z;
+	float turnSpeed;
+	float scale;
 };
 
 

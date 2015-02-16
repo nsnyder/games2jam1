@@ -29,6 +29,8 @@ void Player::init(ID3D10Device* device,
 	x = 0;
 	y = 0;
 	z = 0;
+	turnSpeed = 2;
+	scale = 0.4;
 }
 
 void Player::draw()
@@ -36,7 +38,6 @@ void Player::draw()
     D3D10_TECHNIQUE_DESC techDesc;
     mTech->GetDesc( &techDesc );
 
-	
 	// Rotation in Y
 	/*D3DXMATRIX mRotate;
 	D3DXMatrixRotationY(&mRotate, D3DXToRadian(-90));
@@ -45,8 +46,19 @@ void Player::draw()
 	mLine.setColor(RED);	// Z Axis
 	mLine.draw();*/
 
-	D3DXMATRIX mTransform;
+	// R
 
+	// S
+	D3DXMATRIX mScale;
+	D3DXMatrixScaling(&mScale, scale, scale, scale);
+
+	// T
+	D3DXMATRIX mTranslate;
+	D3DXMatrixTranslation(&mTranslate, x, y, z);
+	
+	
+	D3DXMATRIX mWVP = (mScale)*(mTranslate)*(*mView)*(*mProj);
+	mfxWVPVar->SetMatrix((float*)&mWVP);
 
 	mBox.draw();
 }

@@ -111,6 +111,10 @@ void ColoredCubeApp::updateScene(float dt)
 	if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
 	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
 	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	
+	if (GetAsyncKeyState(VK_LEFT)) player.setX(player.getX() - player.getTurnSpeed() * dt);
+	if (GetAsyncKeyState(VK_RIGHT)) player.setX(player.getX() + player.getTurnSpeed() * dt);
+
 
 	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
@@ -152,7 +156,6 @@ void ColoredCubeApp::drawScene()
 
 	player.draw();
 	
-   
 	
 
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
