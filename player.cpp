@@ -24,7 +24,7 @@ void Player::init(ID3D10Device* device,
 	mfxWVPVar = new_mfxWVPVar;
 	md3dDevice = device;
 	mTech = new_mTech;
-	mBox.init(device, 1.0f);
+	mBox.init(device, mTech);
 
 	x = 0;
 	y = 0;
@@ -48,11 +48,5 @@ void Player::draw()
 	D3DXMATRIX mTransform;
 
 
-	
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        mTech->GetPassByIndex( p )->Apply(0);
-        
-		mBox.draw();
-    }
+	mBox.draw();
 }

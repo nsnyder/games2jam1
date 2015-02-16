@@ -16,8 +16,9 @@ Box::~Box()
 	ReleaseCOM(mIB);
 }
 
-void Box::init(ID3D10Device* device, float scale)
+void Box::init(ID3D10Device* device, ID3D10EffectTechnique* new_mTech)
 {
+	mTech = new_mTech;
 	md3dDevice = device;
  
 	mNumVertices = 8;
@@ -36,10 +37,6 @@ void Box::init(ID3D10Device* device, float scale)
 		{D3DXVECTOR3(+1.0f, +1.0f, +1.0f), CYAN},
 		{D3DXVECTOR3(+1.0f, -1.0f, +1.0f), MAGENTA},
     };
-
-	// Scale the box.
-	for(DWORD i = 0; i < mNumVertices; ++i)
-		vertices[i].pos *= scale;
 
 
     D3D10_BUFFER_DESC vbd;
@@ -95,10 +92,17 @@ void Box::init(ID3D10Device* device, float scale)
 
 void Box::draw()
 {
-	UINT stride = sizeof(Vertex);
-    UINT offset = 0;
-	md3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    md3dDevice->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-	md3dDevice->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
-	md3dDevice->DrawIndexed(mNumFaces*3, 0, 0);
+	D3D10_TECHNIQUE_DESC techDesc;
+	mTech->GetDesc( &techDesc );
+	for(UINT p = 0; p < techDesc.Passes; ++p)
+    {
+		mTech->GetPassByIndex( p )->Apply(0);
+
+		UINT stride = sizeof(Vertex);
+		UINT offset = 0;
+		md3dDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		md3dDevice->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
+		md3dDevice->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
+		md3dDevice->DrawIndexed(mNumFaces*3, 0, 0);
+	}
 }

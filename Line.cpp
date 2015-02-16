@@ -84,6 +84,7 @@ void Line::draw()
 
 void Line::setColor(D3DXCOLOR c1, D3DXCOLOR c2)
 {
+	// Release vertex buffer
 	ReleaseCOM(mVB);
 
 	// Create vertex buffer
@@ -109,7 +110,7 @@ void Line::setColor(D3DXCOLOR c1, D3DXCOLOR c2)
 }
 void Line::setColor(D3DXCOLOR c)
 {
-
+	// Release the vertex buffer
 	ReleaseCOM(mVB);
 
 	// Create vertex buffer
