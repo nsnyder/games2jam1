@@ -11,7 +11,7 @@
 #define D3DAPP_H
 
 
-#include "C:\Users\snyderna1\Dropbox\Grove City\Classes\Games 2\PartII\Common\d3dUtil.h"
+#include "d3dUtil.h"
 #include "GameTimer.h"
 #include <string>
 
