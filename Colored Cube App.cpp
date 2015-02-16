@@ -87,7 +87,7 @@ void ColoredCubeApp::initApp()
 	buildFX();
 	buildVertexLayouts();
 
-	mBox.init(md3dDevice, 1.0f);
+	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 }
 
@@ -143,16 +143,9 @@ void ColoredCubeApp::drawScene()
 	// set constants
 	mWVP = mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
-
-    D3D10_TECHNIQUE_DESC techDesc;
-    mTech->GetDesc( &techDesc );
-    for(UINT p = 0; p < techDesc.Passes; ++p)
-    {
-        mTech->GetPassByIndex( p )->Apply(0);
         
-		//mBox.draw();
+	mBox.draw();
 
-    }
 
 	
 

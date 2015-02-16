@@ -14,7 +14,7 @@ public:
 	Box();
 	~Box();
 
-	void init(ID3D10Device* device, float scale);
+	void init(ID3D10Device* device, ID3D10EffectTechnique* new_mTech);
 	void draw();
 
 private:
@@ -22,6 +22,7 @@ private:
 	DWORD mNumFaces;
 
 	ID3D10Device* md3dDevice;
+	ID3D10EffectTechnique* mTech;
 	ID3D10Buffer* mVB;
 	ID3D10Buffer* mIB;
 };
