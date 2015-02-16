@@ -126,8 +126,7 @@ D3DX10INLINE T Clamp(const T& x, const T& low, const T& high)
 // Constants
 //*****************************************************************************
 
-// this line is giving me a compiler error so i'm going to comment it out 
-//const float INFINITY = FLT_MAX;
+const float INFINITY = FLT_MAX;
 const float PI       = 3.14159265358979323f;
 const float MATH_EPS = 0.0001f;
 
@@ -139,6 +138,7 @@ const D3DXCOLOR BLUE(0.0f, 0.0f, 1.0f, 1.0f);
 const D3DXCOLOR YELLOW(1.0f, 1.0f, 0.0f, 1.0f);
 const D3DXCOLOR CYAN(0.0f, 1.0f, 1.0f, 1.0f);
 const D3DXCOLOR MAGENTA(1.0f, 0.0f, 1.0f, 1.0f);
+const D3DXCOLOR SEA(0.380f, 0.796f, 0.909f, 1.0f);
 
 const D3DXCOLOR BEACH_SAND(1.0f, 0.96f, 0.62f, 1.0f);
 const D3DXCOLOR LIGHT_YELLOW_GREEN(0.48f, 0.77f, 0.46f, 1.0f);
