@@ -9,9 +9,11 @@
 //=============================================================================
 
 #include "d3dApp.h"
+#include <ctime>
 #include "player.h"
 #include "Box.h"
 #include "Axes.h"
+#include "Obstacle.h"
 
 
 class ColoredCubeApp : public D3DApp
@@ -34,6 +36,8 @@ private:
 	Player player;
 	Box mBox;
 	Axes mAxes;
+
+	Obstacle obstacle1;
 
 	ID3D10Effect* mFX;
 	ID3D10EffectTechnique* mTech;
@@ -88,10 +92,12 @@ void ColoredCubeApp::initApp()
 
 	buildFX();
 	buildVertexLayouts();
+	srand(time(0));
 
 	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	player.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	obstacle1.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 }
 
 void ColoredCubeApp::onResize()
@@ -115,6 +121,16 @@ void ColoredCubeApp::updateScene(float dt)
 	if (GetAsyncKeyState(VK_LEFT)) player.setX(player.getX() - player.getTurnSpeed() * dt);
 	if (GetAsyncKeyState(VK_RIGHT)) player.setX(player.getX() + player.getTurnSpeed() * dt);
 
+	int speed = 10;
+
+	// update obstacle positions
+	obstacle1.setZ(obstacle1.getZ() - speed * dt);
+	if (obstacle1.getZ() < -2)
+	{
+		int x = rand() % 4 - 2;
+		obstacle1.setZ(20);
+		obstacle1.setX(x);
+	}
 
 	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
@@ -155,6 +171,7 @@ void ColoredCubeApp::drawScene()
 
 
 	player.draw();
+	obstacle1.draw();
 	
 	
 
