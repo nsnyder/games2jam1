@@ -19,7 +19,8 @@ public:
 			  D3DXMATRIX* new_mView,
 			  D3DXMATRIX* new_mProj,
 			  ID3D10EffectMatrixVariable* new_mfxWVPVar,
-			  ID3D10EffectTechnique* new_mTech);
+			  ID3D10EffectTechnique* new_mTech,
+			  Box* new_mBox);
 
 	void draw();
 
@@ -35,7 +36,7 @@ public:
 
 private:
 	ID3D10Device* md3dDevice;
-	Box mBox;
+	Box* mBox;
 	D3DXMATRIX* mView;
 	D3DXMATRIX* mProj;
 	ID3D10EffectMatrixVariable* mfxWVPVar;

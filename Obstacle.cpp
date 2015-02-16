@@ -17,14 +17,15 @@ void Obstacle::init(ID3D10Device* device,
 				D3DXMATRIX* new_mView,
 				D3DXMATRIX* new_mProj,
 				ID3D10EffectMatrixVariable* new_mfxWVPVar,
-				ID3D10EffectTechnique* new_mTech)
+				ID3D10EffectTechnique* new_mTech,
+				Box* new_mBox)
 {
 	mView = new_mView;
 	mProj = new_mProj;
 	mfxWVPVar = new_mfxWVPVar;
 	md3dDevice = device;
 	mTech = new_mTech;
-	mBox.init(device, mTech);
+	mBox = new_mBox;
 
 	x = 0;
 	y = 0;
@@ -59,5 +60,5 @@ void Obstacle::draw()
 	D3DXMATRIX mWVP = (mScale)*(mTranslate)*(*mView)*(*mProj);
 	mfxWVPVar->SetMatrix((float*)&mWVP);
 
-	mBox.draw();
+	mBox->draw();
 }

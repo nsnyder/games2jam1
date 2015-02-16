@@ -97,7 +97,7 @@ void ColoredCubeApp::initApp()
 	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	player.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
-	obstacle1.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	obstacle1.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech, &mBox);
 }
 
 void ColoredCubeApp::onResize()
@@ -105,7 +105,7 @@ void ColoredCubeApp::onResize()
 	D3DApp::onResize();
 
 	float aspect = (float)mClientWidth/mClientHeight;
-	D3DXMatrixPerspectiveFovLH(&mProj, 0.25f*PI, aspect, 1.0f, 1000.0f);
+	D3DXMatrixPerspectiveFovLH(&mProj, 0.5f*PI, aspect, 1.0f, 1000.0f);
 }
 
 void ColoredCubeApp::updateScene(float dt)
