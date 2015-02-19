@@ -10,11 +10,13 @@
 
 #include "d3dApp.h"
 #include <ctime>
-#include "player.h"
 #include "Box.h"
 #include "Axes.h"
+#include "GameObject.h"
 #include "Obstacle.h"
-
+#include "player.h"
+#include <d3dx9math.h>
+#include "constants.h"
 
 class ColoredCubeApp : public D3DApp
 {
@@ -34,10 +36,10 @@ private:
 private:
 	
 	Player player;
-	Box mBox;
+	Box mBox, redBox;
 	Axes mAxes;
 
-	Obstacle obstacle1;
+	Obstacle obstacles[NUM_OBSTACLES];
 
 	ID3D10Effect* mFX;
 	ID3D10EffectTechnique* mTech;
@@ -94,10 +96,17 @@ void ColoredCubeApp::initApp()
 	buildVertexLayouts();
 	srand(time(0));
 
-	mBox.init(md3dDevice, mTech);
+	redBox.init(md3dDevice, 1.0f, RED);
+	mBox.init(md3dDevice, 1.0f);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
-	player.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
-	obstacle1.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech, &mBox);
+
+	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
+	player.setMTech(mTech);
+
+	for (int i = 0; i < NUM_OBSTACLES; i++) {
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(i*2 - 5, 0, 20), Vector3(0, 0, -10), 0, 1);
+		obstacles[i].setMTech(mTech);
+	}
 }
 
 void ColoredCubeApp::onResize()
@@ -118,18 +127,25 @@ void ColoredCubeApp::updateScene(float dt)
 	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
 	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 	
-	if (GetAsyncKeyState(VK_LEFT)) player.setX(player.getX() - player.getTurnSpeed() * dt);
-	if (GetAsyncKeyState(VK_RIGHT)) player.setX(player.getX() + player.getTurnSpeed() * dt);
+	float turnSpeed = 4;
 
-	int speed = 10;
+	if (GetAsyncKeyState(VK_LEFT)) player.setPositionX(player.getPosition().x - turnSpeed * dt);
+	if (GetAsyncKeyState(VK_RIGHT)) player.setPositionX(player.getPosition().x + turnSpeed * dt);
 
 	// update obstacle positions
-	obstacle1.setZ(obstacle1.getZ() - speed * dt);
-	if (obstacle1.getZ() < -2)
-	{
-		int x = rand() % 4 - 2;
-		obstacle1.setZ(20);
-		obstacle1.setX(x);
+	for (int i = 0; i < NUM_OBSTACLES; i++)
+		obstacles[i].update(dt);
+
+	player.update(dt);
+	
+	// probably move this into obstacle.update
+	for (int i = 0; i < NUM_OBSTACLES; i++) {
+		if (obstacles[i].getPosition().z < -10) {
+			int x = rand() % 100 - 50;
+			int z = rand() % 40;
+			obstacles[i].setPositionZ(40 + z);
+			obstacles[i].setPositionX(x);
+		}
 	}
 
 	// Restrict the angle mPhi. 
@@ -167,14 +183,20 @@ void ColoredCubeApp::drawScene()
 	mWVP = mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
 
-	//mBox.draw();
 
-
+	mWVP = player.getWorldMatrix()  *mView*mProj;
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	player.setMTech(mTech);
 	player.draw();
-	obstacle1.draw();
-	
-	
 
+	for (int i = 0; i < NUM_OBSTACLES; i++) {
+		mWVP = obstacles[i].getWorldMatrix()  *mView*mProj;
+		mfxWVPVar->SetMatrix((float*)&mWVP);
+		obstacles[i].setMTech(mTech);
+		obstacles[i].draw();
+	}
+
+	
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};
 	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
