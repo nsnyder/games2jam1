@@ -104,8 +104,9 @@ void ColoredCubeApp::initApp()
 	player.setMTech(mTech);
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(i*2 - 5, 0, 20), Vector3(0, 0, -10), 0, 1);
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, 1);
 		obstacles[i].setMTech(mTech);
+		//obstacles[i].setInActive();
 	}
 }
 
@@ -124,8 +125,11 @@ void ColoredCubeApp::updateScene(float dt)
 	// Update angles based on input to orbit camera around box.
 	if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
 	if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	//if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	//if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+
+	// make the camera look more into the distance
+	mPhi = 1;
 	
 	float turnSpeed = 4;
 
@@ -138,13 +142,13 @@ void ColoredCubeApp::updateScene(float dt)
 
 	player.update(dt);
 	
-	// probably move this into obstacle.update
+	// probably move this into obstacle.update ?
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
-		if (obstacles[i].getPosition().z < -10) {
-			int x = rand() % 100 - 50;
-			int z = rand() % 40;
-			obstacles[i].setPositionZ(40 + z);
+		if (obstacles[i].getPosition().z < -20) {
+			int x = rand() % AREA_WIDTH - AREA_WIDTH / 2;
+			obstacles[i].setPositionZ(AREA_DEPTH);
 			obstacles[i].setPositionX(x);
+			obstacles[i].setActive();
 		}
 	}
 

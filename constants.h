@@ -14,7 +14,9 @@
 #define ToDegree D3DXToDegree
 
 
-const int NUM_OBSTACLES = 30;
+const int NUM_OBSTACLES = 400;
+const int AREA_WIDTH = 600;
+const int AREA_DEPTH = 600;
 
 
 #endif
