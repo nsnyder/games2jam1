@@ -27,15 +27,15 @@ void GameObject::draw()
     }
 }
 
-void GameObject::init(Box *b, float r, Vector3 pos, Vector3 vel, float sp, float s)
+void GameObject::init(Box *b, float radius, Vector3 pos, Vector3 vel, float speed, float scale)
 {
 	box = b;
-	radius = r;
-	radius *= 1.01; //fudge factor
+	this->radius = radius;
+	this->radius *= 1.01; //fudge factor
 	position = pos;
 	velocity = vel;
-	speed = sp;
-	scale = s;
+	this->speed = speed;
+	this->scale = scale;
 	radiusSquared = radius * radius;
 }
 

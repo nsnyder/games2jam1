@@ -8,8 +8,10 @@
 //
 //=============================================================================
 
-#include "d3dApp.h"
 #include <ctime>
+#include <random>
+
+#include "d3dApp.h"
 #include "Box.h"
 #include "Axes.h"
 #include "GameObject.h"
@@ -95,6 +97,10 @@ void ColoredCubeApp::initApp()
 	buildFX();
 	buildVertexLayouts();
 	srand(time(0));
+	
+	std::uniform_real_distribution<float> randomDistribution(0.25f, 3.0f);
+	std::mt19937 generator;
+
 
 	redBox.init(md3dDevice, 1.0f, RED);
 	mBox.init(md3dDevice, 1.0f);
@@ -104,7 +110,8 @@ void ColoredCubeApp::initApp()
 	player.setMTech(mTech);
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, 1);
+		float randScale = randomDistribution(generator);
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, randScale);
 		obstacles[i].setMTech(mTech);
 		//obstacles[i].setInActive();
 	}
@@ -132,13 +139,15 @@ void ColoredCubeApp::updateScene(float dt)
 	mPhi = 1;
 	
 	float turnSpeed = 4;
-
-	if (GetAsyncKeyState(VK_LEFT)) player.setPositionX(player.getPosition().x - turnSpeed * dt);
-	if (GetAsyncKeyState(VK_RIGHT)) player.setPositionX(player.getPosition().x + turnSpeed * dt);
+	float posChange = 0.0f;
+	if (GetAsyncKeyState(VK_LEFT)) posChange  = - turnSpeed * dt;
+	if (GetAsyncKeyState(VK_RIGHT)) posChange = + turnSpeed * dt;
 
 	// update obstacle positions
-	for (int i = 0; i < NUM_OBSTACLES; i++)
+	for (int i = 0; i < NUM_OBSTACLES; i++) {
+		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
 		obstacles[i].update(dt);
+	}
 
 	player.update(dt);
 	

@@ -15,7 +15,7 @@ public:
 	GameObject();
 	~GameObject();
 
-	void init(Box *b, float r, Vector3 pos, Vector3 vel, float sp, float s);
+	void init(Box *b, float r, Vector3 pos, Vector3 vel, float speed, float scale);
 	void draw();
 	void update(float dt);
 
