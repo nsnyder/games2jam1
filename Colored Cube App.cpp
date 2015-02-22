@@ -102,8 +102,8 @@ void ColoredCubeApp::initApp()
 	std::mt19937 generator;
 
 
-	redBox.init(md3dDevice, 1.0f, RED);
-	mBox.init(md3dDevice, 1.0f);
+	redBox.init(md3dDevice, mTech);
+	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
 	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
@@ -205,7 +205,6 @@ void ColoredCubeApp::drawScene()
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		mWVP = obstacles[i].getWorldMatrix()  *mView*mProj;
 		mfxWVPVar->SetMatrix((float*)&mWVP);
-		obstacles[i].setMTech(mTech);
 		obstacles[i].draw();
 	}
 

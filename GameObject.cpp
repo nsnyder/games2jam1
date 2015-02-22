@@ -43,7 +43,11 @@ void GameObject::update(float dt)
 {
 	position += velocity*dt;
 	Identity(&world);
-	Translate(&world, position.x, position.y, position.z);
+	Matrix translate;
+	Translate(&translate, position.x, position.y, position.z);
+	Matrix scaleMatrix;
+	D3DXMatrixScaling(&scaleMatrix, scale, scale, scale);
+	world = scaleMatrix*translate;
 }
 
 bool GameObject::collided(GameObject *gameObject)
