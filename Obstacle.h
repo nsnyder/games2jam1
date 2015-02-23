@@ -11,7 +11,8 @@
 
 class Obstacle : public GameObject
 {
-
+public:
+	void update(float dt);
 };
 
 #endif // Obstacle_H

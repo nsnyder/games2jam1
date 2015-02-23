@@ -56,6 +56,9 @@ private:
 
 	float mTheta;
 	float mPhi;
+
+	std::uniform_real_distribution<float> randomScaleDistribution;
+	std::mt19937 generator;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -76,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 ColoredCubeApp::ColoredCubeApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0), mVertexLayout(0),
-  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.25f)
+  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.25f), randomScaleDistribution(0.25f, 3.0f)
 {
 	D3DXMatrixIdentity(&mView);
 	D3DXMatrixIdentity(&mProj);
@@ -99,9 +102,6 @@ void ColoredCubeApp::initApp()
 	buildFX();
 	buildVertexLayouts();
 	srand(time(0));
-	
-	std::uniform_real_distribution<float> randomDistribution(0.25f, 3.0f);
-	std::mt19937 generator;
 
 
 	redBox.init(md3dDevice, mTech);
@@ -112,8 +112,8 @@ void ColoredCubeApp::initApp()
 	player.setMTech(mTech);
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
-		float randScale = randomDistribution(generator);
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, randScale);
+		float randScale = randomScaleDistribution(generator);
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -OBSTACLE_SPEED), 0, randScale);
 		obstacles[i].setMTech(mTech);
 		//obstacles[i].setInActive();
 	}
@@ -140,28 +140,37 @@ void ColoredCubeApp::updateScene(float dt)
 	// make the camera look more into the distance
 	mPhi = 1;
 	
-	float turnSpeed = 4;
 	float posChange = 0.0f;
-	if (GetAsyncKeyState(VK_LEFT)) posChange  = - turnSpeed * dt;
-	if (GetAsyncKeyState(VK_RIGHT)) posChange = + turnSpeed * dt;
+	if (GetAsyncKeyState(VK_LEFT)) posChange  = + PLAYER_TURN_SPEED * dt;
+	if (GetAsyncKeyState(VK_RIGHT)) posChange = - PLAYER_TURN_SPEED * dt;
 
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
 		obstacles[i].update(dt);
+		if(obstacles[i].collided(&player)) {
+			if(obstacles[i].getScale() >= player.getScale()) {
+				// Game over
+			} else {
+				obstacles[i].setInActive();
+				player.increaseScale(obstacles[i].getScale());
+				obstacles[i].setScale(randomScaleDistribution(generator));
+			}
+		}
 	}
 
 	player.update(dt);
 	
 	// probably move this into obstacle.update ?
+	/*
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		if (obstacles[i].getPosition().z < -20) {
 			int x = rand() % AREA_WIDTH - AREA_WIDTH / 2;
 			obstacles[i].setPositionZ(AREA_DEPTH);
 			obstacles[i].setPositionX(x);
-			obstacles[i].setActive();
+			//obstacles[i].setActive();
 		}
-	}
+	}*/
 
 	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
@@ -216,8 +225,9 @@ void ColoredCubeApp::drawScene()
 			mfxColorVar->SetInt(SMALLER);
 		}
 
-		// Tries to do a gradient based on how much bigger or smaller. Doesn't really work though
 		/*
+		// Tries to do a gradient based on how much bigger or smaller. Doesn't really work though
+		
 		mfxColorVar->SetInt(EXPERIMENTAL);
 
 		// Calculate the gradient float
@@ -225,10 +235,12 @@ void ColoredCubeApp::drawScene()
 		if(obstacles[i].getScale() > playerScale) {
 			myDiff = min(obstacles[i].getScale()-playerScale,1.0f);
 		} else {
-			myDiff = min(playerScale-obstacles[i].getScale(),1.0f);
+			myDiff = -min(playerScale-obstacles[i].getScale(),1.0f);
 		}
+		myDiff = (1.0f+myDiff) / 2.0f;
 		mfxSlidingVar->SetFloat(myDiff);
 		*/
+		
 
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		obstacles[i].draw();

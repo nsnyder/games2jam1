@@ -36,7 +36,7 @@ void GameObject::init(Box *b, float radius, Vector3 pos, Vector3 vel, float spee
 	velocity = vel;
 	this->speed = speed;
 	this->scale = scale;
-	radiusSquared = radius * radius;
+	radiusSquared = (scale*radius) * (scale*radius);
 }
 
 void GameObject::update(float dt)

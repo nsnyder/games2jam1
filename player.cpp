@@ -8,3 +8,7 @@ void Player::draw() {
 
 	GameObject::draw();
 }
+
+void Player::increaseScale(float collidedScale) {
+	setScale(getScale()+collidedScale*.1f);
+}

@@ -23,6 +23,8 @@ const int LARGER = 1;
 const int SMALLER = 2;
 const int EXPERIMENTAL = 3;
 
+const int OBSTACLE_SPEED = 20;
+const int PLAYER_TURN_SPEED = 4;
 
 #endif
 
