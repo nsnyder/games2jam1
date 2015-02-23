@@ -7,6 +7,7 @@
 cbuffer cbPerObject
 {
 	float4x4 gWVP; 
+	int mode;
 };
 
 void VS(float3 iPosL  : POSITION,
@@ -17,8 +18,21 @@ void VS(float3 iPosL  : POSITION,
 	// Transform to homogeneous clip space.
 	oPosH = mul(float4(iPosL, 1.0f), gWVP);
 	
-	// Just pass vertex color into the pixel shader.
-    oColor = iColor;
+	switch(mode) {
+	case 0:		// Player
+		oColor = float4(0.0f, 0.0f, 1.0f, 1.0f);	// Blue
+		break;
+	case 1:		// Larger than me
+		oColor = float4(1.0f, 0.0f, 0.0f, 1.0f);	// Red
+		break;
+	case 2:		// Smaller than me
+		oColor = float4(0.0f, 1.0f, 0.0f, 1.0f);	// Green
+		break;
+	default:
+		// Just pass vertex color into the pixel shader.
+		oColor = iColor;
+		break;
+	}
 }
 
 float4 PS(float4 posH  : SV_POSITION,

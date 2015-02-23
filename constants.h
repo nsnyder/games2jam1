@@ -18,6 +18,10 @@ const int NUM_OBSTACLES = 400;
 const int AREA_WIDTH = 600;
 const int AREA_DEPTH = 600;
 
+const int PLAYER = 0;
+const int LARGER = 1;
+const int SMALLER = 2;
+
 
 #endif
 

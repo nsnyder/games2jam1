@@ -10,7 +10,8 @@
 
 class Player : public GameObject
 {
-
+public:
+	void draw();
 };
 
 

@@ -4,3 +4,7 @@
 
 #include "Player.h"
 
+void Player::draw() {
+
+	GameObject::draw();
+}

@@ -47,6 +47,7 @@ private:
 	ID3D10EffectTechnique* mTech;
 	ID3D10InputLayout* mVertexLayout;
 	ID3D10EffectMatrixVariable* mfxWVPVar;
+	ID3D10EffectScalarVariable* mfxColorVar;
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
@@ -111,9 +112,7 @@ void ColoredCubeApp::initApp()
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		float randScale = randomDistribution(generator);
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/NUM_OBSTACLES*i), Vector3(0, 0, -40), 0, randScale);
-		if (obstacles[i].getPosition().z < AREA_DEPTH / 3)
-			obstacles[i].setInActive(); // anything that spawns too close to the player just set it inactive
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, randScale);
 		obstacles[i].setMTech(mTech);
 		//obstacles[i].setInActive();
 	}
@@ -140,10 +139,10 @@ void ColoredCubeApp::updateScene(float dt)
 	// make the camera look more into the distance
 	mPhi = 1;
 	
-	float turnSpeed = 32;
+	float turnSpeed = 4;
 	float posChange = 0.0f;
-	if (GetAsyncKeyState(VK_LEFT)) posChange  = + turnSpeed * dt;
-	if (GetAsyncKeyState(VK_RIGHT)) posChange = - turnSpeed * dt;
+	if (GetAsyncKeyState(VK_LEFT)) posChange  = - turnSpeed * dt;
+	if (GetAsyncKeyState(VK_RIGHT)) posChange = + turnSpeed * dt;
 
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
@@ -201,11 +200,20 @@ void ColoredCubeApp::drawScene()
 
 	mWVP = player.getWorldMatrix()  *mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
+	mfxColorVar->SetInt(PLAYER);
 	player.setMTech(mTech);
 	player.draw();
 
+	float playerScale = player.getScale();
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		mWVP = obstacles[i].getWorldMatrix()  *mView*mProj;
+
+		// Check whether it's bigger or smaller, color accordingly
+		if(obstacles[i].getScale() > playerScale) {		// Larger
+			mfxColorVar->SetInt(LARGER);
+		} else {	// Smaller
+			mfxColorVar->SetInt(SMALLER);
+		}
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		obstacles[i].draw();
 	}
@@ -228,7 +236,7 @@ void ColoredCubeApp::buildFX()
  
 	ID3D10Blob* compilationErrors = 0;
 	HRESULT hr = 0;
-	hr = D3DX10CreateEffectFromFile(L"color.fx", 0, 0, 
+	hr = D3DX10CreateEffectFromFile(L"color.fx", 0, 0,
 		"fx_4_0", shaderFlags, 0, md3dDevice, 0, 0, &mFX, &compilationErrors, 0);
 	if(FAILED(hr))
 	{
@@ -243,6 +251,7 @@ void ColoredCubeApp::buildFX()
 	mTech = mFX->GetTechniqueByName("ColorTech");
 	
 	mfxWVPVar = mFX->GetVariableByName("gWVP")->AsMatrix();
+	mfxColorVar = mFX->GetVariableByName("mode")->AsScalar();
 }
 
 void ColoredCubeApp::buildVertexLayouts()
