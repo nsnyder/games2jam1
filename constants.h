@@ -21,6 +21,7 @@ const int AREA_DEPTH = 600;
 const int PLAYER = 0;
 const int LARGER = 1;
 const int SMALLER = 2;
+const int EXPERIMENTAL = 3;
 
 
 #endif

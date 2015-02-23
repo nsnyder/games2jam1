@@ -8,6 +8,7 @@ cbuffer cbPerObject
 {
 	float4x4 gWVP; 
 	int mode;
+	float diff;
 };
 
 void VS(float3 iPosL  : POSITION,
@@ -27,6 +28,11 @@ void VS(float3 iPosL  : POSITION,
 		break;
 	case 2:		// Smaller than me
 		oColor = float4(0.0f, 1.0f, 0.0f, 1.0f);	// Green
+		break;
+	case 3:		// Experimental shading
+		float red = lerp(0.0f, 1.0f, diff);
+		float green = lerp(1.0f, 0.0f, diff);
+		oColor = float4(red, green, 0.0f, 1.0f);
 		break;
 	default:
 		// Just pass vertex color into the pixel shader.

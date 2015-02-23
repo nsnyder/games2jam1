@@ -48,6 +48,7 @@ private:
 	ID3D10InputLayout* mVertexLayout;
 	ID3D10EffectMatrixVariable* mfxWVPVar;
 	ID3D10EffectScalarVariable* mfxColorVar;
+	ID3D10EffectScalarVariable* mfxSlidingVar;
 
 	D3DXMATRIX mView;
 	D3DXMATRIX mProj;
@@ -214,6 +215,21 @@ void ColoredCubeApp::drawScene()
 		} else {	// Smaller
 			mfxColorVar->SetInt(SMALLER);
 		}
+
+		// Tries to do a gradient based on how much bigger or smaller. Doesn't really work though
+		/*
+		mfxColorVar->SetInt(EXPERIMENTAL);
+
+		// Calculate the gradient float
+		float myDiff = 0.0f;
+		if(obstacles[i].getScale() > playerScale) {
+			myDiff = min(obstacles[i].getScale()-playerScale,1.0f);
+		} else {
+			myDiff = min(playerScale-obstacles[i].getScale(),1.0f);
+		}
+		mfxSlidingVar->SetFloat(myDiff);
+		*/
+
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		obstacles[i].draw();
 	}
@@ -252,6 +268,7 @@ void ColoredCubeApp::buildFX()
 	
 	mfxWVPVar = mFX->GetVariableByName("gWVP")->AsMatrix();
 	mfxColorVar = mFX->GetVariableByName("mode")->AsScalar();
+	mfxSlidingVar = mFX->GetVariableByName("diff")->AsScalar();
 }
 
 void ColoredCubeApp::buildVertexLayouts()
