@@ -111,7 +111,9 @@ void ColoredCubeApp::initApp()
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		float randScale = randomDistribution(generator);
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, randScale);
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/NUM_OBSTACLES*i), Vector3(0, 0, -40), 0, randScale);
+		if (obstacles[i].getPosition().z < AREA_DEPTH / 3)
+			obstacles[i].setInActive(); // anything that spawns too close to the player just set it inactive
 		obstacles[i].setMTech(mTech);
 		//obstacles[i].setInActive();
 	}
@@ -138,10 +140,10 @@ void ColoredCubeApp::updateScene(float dt)
 	// make the camera look more into the distance
 	mPhi = 1;
 	
-	float turnSpeed = 4;
+	float turnSpeed = 32;
 	float posChange = 0.0f;
-	if (GetAsyncKeyState(VK_LEFT)) posChange  = - turnSpeed * dt;
-	if (GetAsyncKeyState(VK_RIGHT)) posChange = + turnSpeed * dt;
+	if (GetAsyncKeyState(VK_LEFT)) posChange  = + turnSpeed * dt;
+	if (GetAsyncKeyState(VK_RIGHT)) posChange = - turnSpeed * dt;
 
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
