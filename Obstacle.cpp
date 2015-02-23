@@ -13,3 +13,11 @@ void Obstacle::update(float dt) {
 		this->setActive();
 	}
 }
+
+void Obstacle::increaseScale(float collidedScale) {
+	setScale(getScale()+collidedScale*.05);
+}
+
+void Obstacle::decreaseScale(float collidedScale) {
+	setScale(getScale()-collidedScale);
+}

@@ -13,6 +13,8 @@ class Obstacle : public GameObject
 {
 public:
 	void update(float dt);
+	void increaseScale(float collidedScale);
+	void decreaseScale(float collidedScale);
 };
 
 #endif // Obstacle_H

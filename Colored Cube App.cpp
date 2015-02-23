@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 ColoredCubeApp::ColoredCubeApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0), mVertexLayout(0),
-  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.25f), randomScaleDistribution(0.25f, 3.0f)
+  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.30f), randomScaleDistribution(0.25f, 3.0f)
 {
 	D3DXMatrixIdentity(&mView);
 	D3DXMatrixIdentity(&mProj);
@@ -124,7 +124,7 @@ void ColoredCubeApp::onResize()
 	D3DApp::onResize();
 
 	float aspect = (float)mClientWidth/mClientHeight;
-	D3DXMatrixPerspectiveFovLH(&mProj, 0.5f*PI, aspect, 1.0f, 1000.0f);
+	D3DXMatrixPerspectiveFovLH(&mProj, 0.75f*PI, aspect, 1.0f, 500.0f);
 }
 
 void ColoredCubeApp::updateScene(float dt)
@@ -134,11 +134,11 @@ void ColoredCubeApp::updateScene(float dt)
 	// Update angles based on input to orbit camera around box.
 	if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
 	if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	//if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	//if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
 	// make the camera look more into the distance
-	mPhi = 1;
+	//mPhi = 1;
 	
 	float posChange = 0.0f;
 	if (GetAsyncKeyState(VK_LEFT)) posChange  = + PLAYER_TURN_SPEED * dt;
@@ -150,11 +150,23 @@ void ColoredCubeApp::updateScene(float dt)
 		obstacles[i].update(dt);
 		if(obstacles[i].collided(&player)) {
 			if(obstacles[i].getScale() >= player.getScale()) {
-				// Game over
+				float absorb = min(ABSORPTION_RATE*dt,player.getScale());
+				//player.decreaseScale(absorb);
+				obstacles[i].increaseScale(absorb);
 			} else {
-				obstacles[i].setInActive();
-				player.increaseScale(obstacles[i].getScale());
-				obstacles[i].setScale(randomScaleDistribution(generator));
+				//obstacles[i].setInActive();
+				//player.increaseScale(obstacles[i].getScale());
+				//obstacles[i].setScale(randomScaleDistribution(generator));
+				float absorb = min(ABSORPTION_RATE*dt,obstacles[i].getScale());
+				player.increaseScale(absorb);
+				obstacles[i].decreaseScale(absorb);
+				
+				if(obstacles[i].getScale()<=0) {
+					obstacles[i].setInActive();
+					player.increaseScale(obstacles[i].getScale());
+					obstacles[i].setScale(randomScaleDistribution(generator));
+				}
+
 			}
 		}
 	}
@@ -219,7 +231,7 @@ void ColoredCubeApp::drawScene()
 		mWVP = obstacles[i].getWorldMatrix()  *mView*mProj;
 
 		// Check whether it's bigger or smaller, color accordingly
-		if(obstacles[i].getScale() > playerScale) {		// Larger
+		if(obstacles[i].getScale() >= playerScale) {		// Larger
 			mfxColorVar->SetInt(LARGER);
 		} else {	// Smaller
 			mfxColorVar->SetInt(SMALLER);

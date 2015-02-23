@@ -13,6 +13,7 @@ class Player : public GameObject
 public:
 	void draw();
 	void increaseScale(float);
+	void decreaseScale(float);
 };
 
 
