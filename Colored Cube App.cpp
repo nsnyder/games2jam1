@@ -143,8 +143,14 @@ void ColoredCubeApp::updateScene(float dt)
 	//mPhi = 1;
 	
 	float posChange = 0.0f;
-	if (GetAsyncKeyState(VK_LEFT)) posChange  = + PLAYER_TURN_SPEED * dt;
-	if (GetAsyncKeyState(VK_RIGHT)) posChange = - PLAYER_TURN_SPEED * dt;
+	if (GetAsyncKeyState(VK_LEFT)) {
+		player.rotateZ(PI*0.15f,0.0f,1.5f);
+		posChange  = + PLAYER_TURN_SPEED * dt;
+	}
+	if (GetAsyncKeyState(VK_RIGHT)) {
+		player.rotateZ(-PI*0.15f,0.0f,1.5f);
+		posChange = - PLAYER_TURN_SPEED * dt;
+	}
 
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {

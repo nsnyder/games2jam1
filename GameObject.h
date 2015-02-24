@@ -41,6 +41,10 @@ public:
 	void setPositionY(float y) { setPosition(Vector3(position.x, y, position.z)); }
 	void setPositionZ(float z) { setPosition(Vector3(position.x, position.y, z)); }
 
+	void rotateX(float destination, float returnLocation, float speed);
+	void rotateY(float destination, float returnLocation, float speed);
+	void rotateZ(float destination, float returnLocation, float speed);
+
 
 private:
 	Box *box; 
@@ -53,6 +57,22 @@ private:
 	Matrix world;
 	float scale;
 	ID3D10EffectTechnique* mTech;
+
+	int   dirX;
+	float curX;
+	float speedX;
+	float destinationX;
+	float returnX;
+	int   dirY;
+	float curY;
+	float speedY;
+	float destinationY;
+	float returnY;
+	int   dirZ;
+	float curZ;
+	float speedZ;
+	float destinationZ;
+	float returnZ;
 };
 
 
