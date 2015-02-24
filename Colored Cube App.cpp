@@ -113,9 +113,11 @@ void ColoredCubeApp::initApp()
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		float randScale = randomScaleDistribution(generator);
-		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_OBSTACLES*i + AREA_DEPTH / 2), Vector3(0, 0, -OBSTACLE_SPEED), 0, randScale);
+		// spawn the obstacles evenly over the z direction. if they spawn too close to the player, hide them until they hit the back wall.
+		obstacles[i].init(&redBox, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/NUM_OBSTACLES*i), Vector3(0, 0, -OBSTACLE_SPEED), 0, randScale);
 		obstacles[i].setMTech(mTech);
-		//obstacles[i].setInActive();
+		if (obstacles[i].getPosition().z < AREA_DEPTH / 3)
+			obstacles[i].setInActive(); 
 	}
 }
 
