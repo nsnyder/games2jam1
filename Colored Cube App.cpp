@@ -79,7 +79,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 ColoredCubeApp::ColoredCubeApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0), mVertexLayout(0),
-  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.30f), randomScaleDistribution(0.25f, 3.0f)
+  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.30f), randomScaleDistribution(0.25f, 2.25f)
 {
 	D3DXMatrixIdentity(&mView);
 	D3DXMatrixIdentity(&mProj);
@@ -151,7 +151,7 @@ void ColoredCubeApp::updateScene(float dt)
 		if(obstacles[i].collided(&player)) {
 			if(obstacles[i].getScale() >= player.getScale()) {
 				float absorb = min(ABSORPTION_RATE*dt,player.getScale());
-				//player.decreaseScale(absorb);
+				player.decreaseScale(absorb);
 				obstacles[i].increaseScale(absorb);
 			} else {
 				//obstacles[i].setInActive();

@@ -10,9 +10,11 @@ void Player::draw() {
 }
 
 void Player::increaseScale(float collidedScale) {
-	setScale(getScale()+collidedScale*.05);
+	if(getScale()<2.5) {
+		setScale(getScale()+collidedScale*.05);
+	}
 }
 
 void Player::decreaseScale(float collidedScale) {
-	//setScale(getScale()-collidedScale*.05);
+	setScale(getScale()-collidedScale*.05);
 }

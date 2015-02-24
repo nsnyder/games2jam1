@@ -19,5 +19,5 @@ void Obstacle::increaseScale(float collidedScale) {
 }
 
 void Obstacle::decreaseScale(float collidedScale) {
-	setScale(getScale()-collidedScale);
+	setScale(getScale()-collidedScale*0.05);
 }
