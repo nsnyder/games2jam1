@@ -47,6 +47,7 @@ void GameObject::update(float dt)
 	Translate(&translate, position.x, position.y, position.z);
 	Matrix scaleMatrix;
 	D3DXMatrixScaling(&scaleMatrix, scale, scale, scale);
+	// Put in rotation
 	world = scaleMatrix*translate;
 }
 

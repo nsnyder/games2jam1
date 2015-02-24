@@ -134,10 +134,10 @@ void ColoredCubeApp::updateScene(float dt)
 	D3DApp::updateScene(dt);
 
 	// Update angles based on input to orbit camera around box.
-	if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
-	if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	// if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
+	// if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
+	// if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	// if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
 	// make the camera look more into the distance
 	//mPhi = 1;
