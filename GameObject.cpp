@@ -78,8 +78,6 @@ void GameObject::update(float dt)
 			dirX = 0;
 			curX = returnX;
 		}
-	} else if(dirX == 0 ) {
-		curX = returnX;
 	}
 
 	if(dirY == 1) {
@@ -104,8 +102,6 @@ void GameObject::update(float dt)
 			dirY = 0;
 			curY = returnY;
 		}
-	} else if(dirY == 0 ) {
-		curY = returnY;
 	}
 
 	if(dirZ == 1) {		// It's rotating in the positive direction
@@ -130,11 +126,7 @@ void GameObject::update(float dt)
 			dirZ = 0;
 			curZ = returnZ;
 		}
-	} else if(dirZ == 0 ) {
-		curZ = returnZ;
 	}
-
-	_RPT1(0, "direction x %f\n", curZ);
 	
 
 	Identity(&world);
