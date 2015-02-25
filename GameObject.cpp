@@ -12,6 +12,9 @@ GameObject::GameObject()
 	dirX = 0;
 	dirY = 0;
 	dirZ = 0;
+	returnX = 0.0f;
+	returnY = 0.0f;
+	returnZ = 0.0f;
 	radius = 0;
 	speed = 0;
 	active = true;
@@ -56,62 +59,82 @@ void GameObject::update(float dt)
 	if(dirX == 1) {
 		if(curX < destinationX) {
 			curX += speedX*dt;
+			if(curX > destinationX) curX = destinationX;
 		} else if(destinationX != returnX) {
 			dirX = -1;
 			destinationX = returnX;
 		} else {
 			dirX = 0;
+			curX = returnX;
 		}
 	} else if(dirX == -1) {
 		if(curX > destinationX) {
 			curX -= speedX*dt;
+			if(curX < destinationX) curX = destinationX;
 		} else if(destinationX != returnX) {
 			dirX = 1;
 			destinationX = returnX;
 		} else {
 			dirX = 0;
+			curX = returnX;
 		}
+	} else if(dirX == 0 ) {
+		curX = returnX;
 	}
 
 	if(dirY == 1) {
 		if(curY < destinationY) {
 			curY += speedY*dt;
+			if(curY > destinationY) curY = destinationY;
 		} else if(destinationY != returnY) {
 			dirY = -1;
 			destinationY = returnY;
 		} else {
 			dirY = 0;
+			curY = returnY;
 		}
 	} else if(dirY == -1) {
 		if(curY > destinationY) {
 			curY -= speedY*dt;
+			if(curY < destinationY) curY = destinationY;
 		} else if(destinationY != returnY) {
 			dirY = 1;
 			destinationY = returnY;
 		} else {
 			dirY = 0;
+			curY = returnY;
 		}
+	} else if(dirY == 0 ) {
+		curY = returnY;
 	}
 
-	if(dirZ == 1) {
-		if(curZ < destinationZ) {
-			curZ += speedZ*dt;
-		} else if(destinationZ != returnZ) {
+	if(dirZ == 1) {		// It's rotating in the positive direction
+		if(curZ < destinationZ) {	// If it still needs to rotate farther
+			curZ += speedZ*dt;	// Rotate it more
+			if(curZ > destinationZ) curZ = destinationZ;
+		} else if(curZ != returnZ) {	// It doesn't need to rotate farther and the destination but needs to rotate to another spot after
 			dirZ = -1;
-			destinationZ = returnZ;
+			destinationZ = returnZ;	// Destination and return are the same
 		} else {
 			dirZ = 0;
+			curZ = returnZ;
 		}
 	} else if(dirZ == -1) {
 		if(curZ > destinationZ) {
 			curZ -= speedZ*dt;
-		} else if(destinationZ != returnZ) {
+			if(curZ < destinationZ) curZ = destinationZ;
+		} else if(curZ != returnZ) {
 			dirZ = 1;
 			destinationZ = returnZ;
 		} else {
 			dirZ = 0;
+			curZ = returnZ;
 		}
+	} else if(dirZ == 0 ) {
+		curZ = returnZ;
 	}
+
+	_RPT1(0, "direction x %f\n", curZ);
 	
 
 	Identity(&world);
