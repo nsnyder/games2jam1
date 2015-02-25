@@ -32,7 +32,7 @@ void Mountain::init(ID3D10Device* device,
 
 	mTech = new_mTech;
  
-	mNumVertices = 8;
+	mNumVertices = 5;
 	mNumFaces    = 3; // 2 per quad
 
 	// Create vertex buffer
@@ -43,10 +43,7 @@ void Mountain::init(ID3D10Device* device,
 		{D3DXVECTOR3(-1.0f, +0.0f, 0.0f), DARK_YELLOW_GREEN},	// Right Base
 		{D3DXVECTOR3(+0.0f, +2.0f, 0.0f), WHITE},	// Tip
 		{D3DXVECTOR3(+.25f, +1.5f, 0.0f), DARKBROWN},
-		{D3DXVECTOR3(-.25f, +1.5f, 0.0f), DARKBROWN},
-		{D3DXVECTOR3(-.25f, +1.0f, 0.0f), RED},
-		{D3DXVECTOR3(+1.0f, +1.0f, 0.0f), RED},
-		{D3DXVECTOR3(+1.0f, -1.0f, 0.0f), RED},
+		{D3DXVECTOR3(-.25f, +1.5f, 0.0f), DARKBROWN}
     };
 
 
