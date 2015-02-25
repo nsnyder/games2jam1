@@ -32,7 +32,7 @@ void Axes::draw()
 	D3DXMATRIX mWVP = (*mView)*(*mProj);
 	mfxWVPVar->SetMatrix((float*)&mWVP);
 
-	mLine.setColor(BLACK);	// X Axis
+	mLine.setColor(RED);	// X Axis
 	mLine.draw();
 
 	// Rotation in Y
@@ -48,6 +48,6 @@ void Axes::draw()
 	D3DXMatrixRotationZ(&mRotate, D3DXToRadian(90));
 	mWVP = (mRotate)*(*mView)*(*mProj);
 	mfxWVPVar->SetMatrix((float*)&mWVP);
-	mLine.setColor(GREEN);	// Y Axis
+	mLine.setColor(RED);	// Y Axis
 	mLine.draw();
 }

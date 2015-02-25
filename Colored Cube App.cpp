@@ -57,6 +57,8 @@ private:
 	float mTheta;
 	float mPhi;
 
+	float previousPlayerScale;
+
 	std::uniform_real_distribution<float> randomScaleDistribution;
 	std::mt19937 generator;
 };
@@ -108,7 +110,8 @@ void ColoredCubeApp::initApp()
 	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
-	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
+	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 5), Vector3(0, 0, 0), 0, 1);
+	previousPlayerScale = 1.0f;
 	player.setMTech(mTech);
 
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
@@ -152,6 +155,11 @@ void ColoredCubeApp::updateScene(float dt)
 		posChange = - PLAYER_TURN_SPEED * dt;
 	}
 
+	if(abs(player.getScale()-previousPlayerScale) > 0.25f) {
+		randomScaleDistribution = std::uniform_real_distribution<float>(player.getScale()-0.15, player.getScale()+0.75);
+		previousPlayerScale = player.getScale();
+	}
+
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
@@ -179,18 +187,15 @@ void ColoredCubeApp::updateScene(float dt)
 		}
 	}
 
-	player.update(dt);
-	
 	// probably move this into obstacle.update ?
-	/*
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
-		if (obstacles[i].getPosition().z < -20) {
-			int x = rand() % AREA_WIDTH - AREA_WIDTH / 2;
-			obstacles[i].setPositionZ(AREA_DEPTH);
-			obstacles[i].setPositionX(x);
-			//obstacles[i].setActive();
+		if (obstacles[i].getPosition().z >= AREA_DEPTH) {
+			float newScale = randomScaleDistribution(generator);
+			obstacles[i].setScale(newScale);
 		}
-	}*/
+	}
+
+	player.update(dt);
 
 	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
@@ -221,6 +226,7 @@ void ColoredCubeApp::drawScene()
 	md3dDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
     md3dDevice->IASetInputLayout(mVertexLayout);
     
+	mfxColorVar->SetInt(NO_CHANGE);
 	mAxes.draw();
    
 	// set constants

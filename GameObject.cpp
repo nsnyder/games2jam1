@@ -56,6 +56,7 @@ void GameObject::update(float dt)
 	position += velocity*dt;
 
 	// Rotation stuff
+#pragma region Rotation
 	if(dirX == 1) {
 		if(curX < destinationX) {
 			curX += speedX*dt;
@@ -127,6 +128,8 @@ void GameObject::update(float dt)
 			curZ = returnZ;
 		}
 	}
+#pragma endregion Big mess of rotation code
+
 	
 
 	Identity(&world);
