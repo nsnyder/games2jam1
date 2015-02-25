@@ -13,6 +13,7 @@
 
 #include "d3dApp.h"
 #include "Box.h"
+#include "Mountain - Nathan Snyder.h"
 #include "Axes.h"
 #include "GameObject.h"
 #include "Obstacle.h"
@@ -40,6 +41,8 @@ private:
 	Player player;
 	Box mBox, redBox;
 	Axes mAxes;
+
+	Mountain mt;	// Scenery
 
 	Obstacle obstacles[NUM_OBSTACLES];
 
@@ -109,6 +112,9 @@ void ColoredCubeApp::initApp()
 	redBox.init(md3dDevice, mTech);
 	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	mt.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	mt.setScale(D3DXVECTOR3(75.0f, 50.0f, 50.0f));
+	mt.setPosition(D3DXVECTOR3(0.0f, 0.0f, 300.0f));
 
 	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 5), Vector3(0, 0, 0), 0, 1);
 	previousPlayerScale = 1.0f;
@@ -159,7 +165,9 @@ void ColoredCubeApp::updateScene(float dt)
 		randomScaleDistribution = std::uniform_real_distribution<float>(player.getScale()-0.15, player.getScale()+0.75);
 		previousPlayerScale = player.getScale();
 	}
-
+	D3DXVECTOR3 tmpPosition = mt.getPosition();
+	tmpPosition.x += posChange*0.5;
+	mt.setPosition(tmpPosition);
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
@@ -169,6 +177,10 @@ void ColoredCubeApp::updateScene(float dt)
 				float absorb = min(ABSORPTION_RATE*dt,player.getScale());
 				player.decreaseScale(absorb);
 				obstacles[i].increaseScale(absorb);
+				D3DXVECTOR3 tmpScale = mt.getScale();
+				tmpScale.x -= absorb*1.5f;
+				tmpScale.y -= absorb;
+				mt.setScale(tmpScale);
 			} else {
 				//obstacles[i].setInActive();
 				//player.increaseScale(obstacles[i].getScale());
@@ -176,6 +188,13 @@ void ColoredCubeApp::updateScene(float dt)
 				float absorb = min(ABSORPTION_RATE*dt,obstacles[i].getScale());
 				player.increaseScale(absorb);
 				obstacles[i].decreaseScale(absorb);
+
+				if(player.getScale() < 2.5f) {
+					D3DXVECTOR3 tmpScale = mt.getScale();
+					tmpScale.x += absorb*1.5f;
+					tmpScale.y += absorb;
+					mt.setScale(tmpScale);
+				}
 				
 				if(obstacles[i].getScale()<=0) {
 					obstacles[i].setInActive();
@@ -228,6 +247,8 @@ void ColoredCubeApp::drawScene()
     
 	mfxColorVar->SetInt(NO_CHANGE);
 	mAxes.draw();
+
+	mt.draw();
    
 	// set constants
 	mWVP = mView*mProj;

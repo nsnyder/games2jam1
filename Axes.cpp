@@ -28,26 +28,29 @@ void Axes::init(ID3D10Device* device,
 
 void Axes::draw()
 {
-	// Do the transforms, draw the line
-	D3DXMATRIX mWVP = (*mView)*(*mProj);
-	mfxWVPVar->SetMatrix((float*)&mWVP);
+	D3DXMATRIX mScale;
+	D3DXMatrixScaling(&mScale, 10.0f, 10.0f, 10.0f);
 
+	// Do the transforms, draw the line
+	D3DXMATRIX mWVP = mScale*(*mView)*(*mProj);
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	
 	mLine.setColor(RED);	// X Axis
 	mLine.draw();
 
 	// Rotation in Y
 	D3DXMATRIX mRotate;
 	D3DXMatrixRotationY(&mRotate, D3DXToRadian(-90));
-	mWVP = (mRotate)*(*mView)*(*mProj);
+	mWVP = mScale*(mRotate)*(*mView)*(*mProj);
 	mfxWVPVar->SetMatrix((float*)&mWVP);
-	mLine.setColor(RED);	// Z Axis
+	mLine.setColor(BLUE);	// Z Axis
 	mLine.draw();
 
 	// Rotation in Z
 	mRotate;
 	D3DXMatrixRotationZ(&mRotate, D3DXToRadian(90));
-	mWVP = (mRotate)*(*mView)*(*mProj);
+	mWVP = mScale*(mRotate)*(*mView)*(*mProj);
 	mfxWVPVar->SetMatrix((float*)&mWVP);
-	mLine.setColor(RED);	// Y Axis
+	mLine.setColor(GREEN);	// Y Axis
 	mLine.draw();
 }
