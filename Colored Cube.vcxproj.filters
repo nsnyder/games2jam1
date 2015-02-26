@@ -42,10 +42,20 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="boost.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="boostObject.cpp">
+=======
+    <ClCompile Include="Mountain - Nathan Snyder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane_NickHalvorsen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ground_NickHalvorsen.cpp">
+>>>>>>> origin/master
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,10 +93,20 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="boost.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="boostObject.h">
+=======
+    <ClInclude Include="Mountain - Nathan Snyder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ground_NickHalvorsen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane_NickHalvorsen.h">
+>>>>>>> origin/master
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
