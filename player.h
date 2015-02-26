@@ -14,6 +14,7 @@ public:
 	void draw();
 	void increaseScale(float);
 	void decreaseScale(float);
+	void update(float dt);
 };
 
 

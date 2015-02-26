@@ -39,6 +39,7 @@ public:
 private:
 	void buildFX();
 	void buildVertexLayouts();
+	void setScaleRange(float low, float high);
  
 private:
 	
@@ -196,7 +197,7 @@ void ColoredCubeApp::updateScene(float dt)
 
 
 	if(abs(player.getScale()-previousPlayerScale) > 0.25f) {
-		randomScaleDistribution = std::uniform_real_distribution<float>(player.getScale()-0.15, player.getScale()+0.75);
+		setScaleRange(player.getScale()-0.15, player.getScale()+0.75);
 		previousPlayerScale = player.getScale();
 	}
 	D3DXVECTOR3 tmpPosition = mt.getPosition();
@@ -399,4 +400,7 @@ void ColoredCubeApp::buildVertexLayouts()
     HR(md3dDevice->CreateInputLayout(vertexDesc, 2, PassDesc.pIAInputSignature,
 		PassDesc.IAInputSignatureSize, &mVertexLayout));
 }
- 
+
+void ColoredCubeApp::setScaleRange(float low, float high) {
+	randomScaleDistribution = std::uniform_real_distribution<float>(low, high);
+}
