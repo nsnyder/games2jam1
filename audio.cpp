@@ -81,7 +81,7 @@ HRESULT Audio::initialize()
 
     // Create an "in memory" XACT wave bank file using memory mapped file IO
     result = E_FAIL; // default to failure code, replaced on success
-    hFile = CreateFile( WAVE_BANK, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL );
+    hFile = CreateFile(WAVE_BANK, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL );
     if( hFile != INVALID_HANDLE_VALUE )
     {
         fileSize = GetFileSize( hFile, NULL );

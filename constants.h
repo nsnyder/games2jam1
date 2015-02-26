@@ -14,6 +14,13 @@
 #define ToDegree D3DXToDegree
 
 
+const wchar_t WAVE_BANK[]  = L"audio\\Win\\MyWBank.xwb";
+// SOUND_BANK must be location of .xsb file.
+const wchar_t SOUND_BANK[] = L"audio\\Win\\MySBank.xsb";
+
+const char THEME_MUSIC[]= "theme";
+
+
 const int NUM_OBSTACLES = 400;
 const int NUM_BOOST = 100;
 const int AREA_WIDTH = 600;

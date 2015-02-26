@@ -24,12 +24,13 @@
 #include "boostObject.h"
 #include "Ground_NickHalvorsen.h"
 #include "Plane_NickHalvorsen.h"
+#include "audio.h"
 class ColoredCubeApp : public D3DApp
 {
 public:
 	ColoredCubeApp(HINSTANCE hInstance);
 	~ColoredCubeApp();
-
+	void init_audio();
 	void initApp();
 	void onResize();
 	void updateScene(float dt);
@@ -48,7 +49,7 @@ private:
 	Ground theGround;
 
 	Mountain mt;	// Scenery
-
+	Audio   *audio;
 	Obstacle obstacles[NUM_OBSTACLES];
 	Boost my_boost;
 	boostObject boosts[NUM_BOOST];
@@ -107,6 +108,11 @@ ColoredCubeApp::~ColoredCubeApp()
 	ReleaseCOM(mVertexLayout);
 }
 
+void ColoredCubeApp::init_audio(){
+	 audio = new Audio();
+     audio->initialize();
+}
+
 void ColoredCubeApp::initApp()
 {
 	D3DApp::initApp();
@@ -114,6 +120,10 @@ void ColoredCubeApp::initApp()
 	buildFX();
 	buildVertexLayouts();
 	srand(time(0));
+
+	//Play startup music
+	init_audio();
+	audio->playCue(THEME_MUSIC);
 
 	my_boost.init(md3dDevice, mTech);
 	redBox.init(md3dDevice, mTech);

@@ -1,114 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
+    <ClCompile Include="Axes.cpp" />
+    <ClCompile Include="boost.cpp" />
+    <ClCompile Include="boostObject.cpp" />
+    <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Colored Cube App.cpp" />
+    <ClCompile Include="d3dApp.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="Ground_NickHalvorsen.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Mountain - Nathan Snyder.cpp" />
+    <ClCompile Include="Obstacle.cpp" />
+    <ClCompile Include="Plane_NickHalvorsen.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="audio.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Colored Cube App.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Line.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Axes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="d3dApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Obstacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="boost.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boostObject.cpp">
-=======
-    <ClCompile Include="Mountain - Nathan Snyder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane_NickHalvorsen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground_NickHalvorsen.cpp">
->>>>>>> origin/master
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Vertex.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Line.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Axes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="d3dUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Obstacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="boost.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boostObject.h">
-=======
-    <ClInclude Include="Mountain - Nathan Snyder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground_NickHalvorsen.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane_NickHalvorsen.h">
->>>>>>> origin/master
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Axes.h" />
+    <ClInclude Include="boost.h" />
+    <ClInclude Include="boostObject.h" />
+    <ClInclude Include="Box.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="d3dApp.h" />
+    <ClInclude Include="d3dUtil.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="Ground_NickHalvorsen.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="Mountain - Nathan Snyder.h" />
+    <ClInclude Include="Obstacle.h" />
+    <ClInclude Include="Plane_NickHalvorsen.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Vertex.h" />
+    <ClInclude Include="audio.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.fx" />

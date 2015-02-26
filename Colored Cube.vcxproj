@@ -88,6 +88,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="audio.cpp" />
     <ClCompile Include="Axes.cpp" />
     <ClCompile Include="boost.cpp" />
     <ClCompile Include="boostObject.cpp" />
@@ -104,6 +105,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audio.h" />
     <ClInclude Include="Axes.h" />
     <ClInclude Include="boost.h" />
     <ClInclude Include="boostObject.h" />
