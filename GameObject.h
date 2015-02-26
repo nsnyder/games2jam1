@@ -43,15 +43,19 @@ public:
 
 
 private:
-	Box *box; 
+
+protected:
 	Vector3 position;
 	Vector3 velocity;
 	float speed;
 	float radius;
 	float radiusSquared;
+	float scale;	
+	Box *box; 
+	
 	bool active;
 	Matrix world;
-	float scale;
+	
 	ID3D10EffectTechnique* mTech;
 };
 

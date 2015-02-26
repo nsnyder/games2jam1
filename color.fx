@@ -23,9 +23,9 @@ void VS(float3 iPosL  : POSITION,
 	case 0:		// Player
 		oColor = float4(0.0f, 0.0f, 1.0f, 1.0f);	// Blue
 		break;
-	case 1:		// Larger than me
+	/*case 1:		// Larger than me
 		oColor = float4(1.0f, 0.0f, 0.0f, 1.0f);	// Red
-		break;
+		break;*/
 	case 2:		// Smaller than me
 		oColor = float4(0.0f, 1.0f, 0.0f, 1.0f);	// Green
 		break;
