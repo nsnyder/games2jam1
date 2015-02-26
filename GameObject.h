@@ -45,6 +45,7 @@ public:
 	void rotateY(float destination, float returnLocation, float speed);
 	void rotateZ(float destination, float returnLocation, float speed);
 
+	ID3D10EffectTechnique* getmTech(){ return mTech; }
 
 private:
 	Box *box; 

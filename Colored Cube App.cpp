@@ -20,6 +20,8 @@
 #include "player.h"
 #include <d3dx9math.h>
 #include "constants.h"
+#include "Ground_NickHalvorsen.h"
+#include "Plane_NickHalvorsen.h"
 
 class ColoredCubeApp : public D3DApp
 {
@@ -41,6 +43,8 @@ private:
 	Player player;
 	Box mBox, redBox;
 	Axes mAxes;
+	Plane thePlane;
+	Ground theGround;
 
 	Mountain mt;	// Scenery
 
@@ -111,11 +115,14 @@ void ColoredCubeApp::initApp()
 
 	redBox.init(md3dDevice, mTech);
 	mBox.init(md3dDevice, mTech);
+	thePlane.init(md3dDevice, 1.0f, DARKBROWN);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	mt.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	mt.setScale(D3DXVECTOR3(75.0f, 50.0f, 50.0f));
 	mt.setPosition(D3DXVECTOR3(0.0f, 0.0f, 300.0f));
 
+	theGround.init(&thePlane, sqrt(1.0f), Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
+	theGround.setMTech(mTech);
 	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 5), Vector3(0, 0, 0), 0, 1);
 	previousPlayerScale = 1.0f;
 	player.setMTech(mTech);
@@ -215,6 +222,7 @@ void ColoredCubeApp::updateScene(float dt)
 	}
 
 	player.update(dt);
+	theGround.update(dt);
 
 	// Restrict the angle mPhi. 
 	if( mPhi < 0.1f )	mPhi = 0.1f;
@@ -247,6 +255,11 @@ void ColoredCubeApp::drawScene()
     
 	mfxColorVar->SetInt(NO_CHANGE);
 	mAxes.draw();
+
+	mWVP = theGround.getWorldMatrix()  *mView*mProj;
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	theGround.setMTech(mTech);
+	theGround.draw();
 
 	mt.draw();
    
