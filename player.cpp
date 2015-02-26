@@ -18,3 +18,8 @@ void Player::increaseScale(float collidedScale) {
 void Player::decreaseScale(float collidedScale) {
 	setScale(getScale()-collidedScale*.05);
 }
+
+void Player::update(float dt) {
+	decreaseScale(0.5f*dt);
+	GameObject::update(dt);
+}
