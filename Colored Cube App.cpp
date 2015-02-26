@@ -20,9 +20,10 @@
 #include "player.h"
 #include <d3dx9math.h>
 #include "constants.h"
+#include "boost.h"
+#include "boostObject.h"
 #include "Ground_NickHalvorsen.h"
 #include "Plane_NickHalvorsen.h"
-
 class ColoredCubeApp : public D3DApp
 {
 public:
@@ -50,6 +51,8 @@ private:
 	Mountain mt;	// Scenery
 
 	Obstacle obstacles[NUM_OBSTACLES];
+	Boost my_boost;
+	boostObject boosts[NUM_BOOST];
 
 	ID3D10Effect* mFX;
 	ID3D10EffectTechnique* mTech;
@@ -113,7 +116,7 @@ void ColoredCubeApp::initApp()
 	buildVertexLayouts();
 	srand(time(0));
 
-
+	my_boost.init(md3dDevice, mTech);
 	redBox.init(md3dDevice, mTech);
 	mBox.init(md3dDevice, mTech);
 	thePlane.init(md3dDevice, 1.0f, DARKBROWN);
@@ -136,6 +139,12 @@ void ColoredCubeApp::initApp()
 		if (obstacles[i].getPosition().z < AREA_DEPTH / 3)
 			obstacles[i].setInActive(); 
 	}
+	for(int a = 0; a < NUM_BOOST; a++){
+		//float randScale = randomDistribution(generator);
+		boosts[a].init(&my_boost, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_BOOST*a + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, 1.0f);
+		boosts[a].setMTech(mTech);
+	}
+
 }
 
 void ColoredCubeApp::onResize()
@@ -158,8 +167,15 @@ void ColoredCubeApp::updateScene(float dt)
 
 	// make the camera look more into the distance
 	//mPhi = 1;
-	
+
+	float turnSpeed = 100;
 	float posChange = 0.0f;
+
+
+	if (GetAsyncKeyState(VK_UP)) player.setVelocity(2.0f*player.getVelocity());
+	if (GetAsyncKeyState(VK_DOWN))  player.setVelocity(.5f*player.getVelocity());
+
+
 	if (GetAsyncKeyState(VK_LEFT)) {
 		player.rotateZ(PI*0.15f,0.0f,1.5f);
 		posChange  = + PLAYER_TURN_SPEED * dt;
@@ -168,6 +184,7 @@ void ColoredCubeApp::updateScene(float dt)
 		player.rotateZ(-PI*0.15f,0.0f,1.5f);
 		posChange = - PLAYER_TURN_SPEED * dt;
 	}
+
 
 	if(abs(player.getScale()-previousPlayerScale) > 0.25f) {
 		setScaleRange(player.getScale()-0.15, player.getScale()+0.75);
@@ -214,6 +231,16 @@ void ColoredCubeApp::updateScene(float dt)
 		}
 	}
 
+
+	for (int i = 0; i < NUM_BOOST; i++) {
+		boosts[i].setPositionX(boosts[i].getPosition().x + posChange);
+		boosts[i].update(dt);
+	}
+
+	player.update(dt);
+	
+
+
 	// probably move this into obstacle.update ?
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		if (obstacles[i].getPosition().z >= AREA_DEPTH) {
@@ -255,7 +282,7 @@ void ColoredCubeApp::drawScene()
     md3dDevice->IASetInputLayout(mVertexLayout);
     
 	mfxColorVar->SetInt(NO_CHANGE);
-	mAxes.draw();
+	//mAxes.draw();
 
 	mWVP = theGround.getWorldMatrix()  *mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
@@ -274,6 +301,8 @@ void ColoredCubeApp::drawScene()
 	mfxColorVar->SetInt(PLAYER);
 	player.setMTech(mTech);
 	player.draw();
+
+
 
 	float playerScale = player.getScale();
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
@@ -307,7 +336,9 @@ void ColoredCubeApp::drawScene()
 		obstacles[i].draw();
 	}
 
-	
+	for(int a = 0; a < NUM_BOOST; a++){
+		boosts[a].draw();
+	}
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};
 	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
