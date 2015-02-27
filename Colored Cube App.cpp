@@ -151,7 +151,7 @@ void ColoredCubeApp::initApp()
 	}
 	for(int a = 0; a < NUM_BOOST; a++){
 		//float randScale = randomDistribution(generator);
-		boosts[a].init(&my_boost, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_BOOST*a + AREA_DEPTH / 2), Vector3(0, 0, -20), 0, 1.0f);
+		boosts[a].init(&my_boost, sqrt(2.0f), Vector3(rand() % AREA_WIDTH - AREA_WIDTH / 2, 0, 1.0f * AREA_DEPTH/2/NUM_BOOST*a + AREA_DEPTH / 2), Vector3(0, 0, -OBSTACLE_SPEED), 0, 1.0f);
 		boosts[a].setMTech(mTech);
 	}
 
@@ -208,6 +208,15 @@ void ColoredCubeApp::updateScene(float dt)
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
 		obstacles[i].update(dt);
 		if(obstacles[i].collided(&player)) {
+
+			obstacles[i].setInActive();
+			if(obstacles[i].getScale() >= player.getScale()) {	// obstacle is bigger
+				player.decreaseScale(obstacles[i].getScale());
+			} else {
+				player.increaseScale(obstacles[i].getScale());
+			}
+
+			/*
 			if(obstacles[i].getScale() >= player.getScale()) {
 				float absorb = min(ABSORPTION_RATE*dt,player.getScale());
 				player.decreaseScale(absorb);
@@ -238,6 +247,7 @@ void ColoredCubeApp::updateScene(float dt)
 				}
 
 			}
+			*/
 		}
 	}
 
@@ -346,8 +356,9 @@ void ColoredCubeApp::drawScene()
 		obstacles[i].draw();
 	}
 
-	for(int a = 0; a < NUM_BOOST; a++){
-		boosts[a].draw();
+	mfxColorVar->SetInt(NO_CHANGE);
+	for(int i = 0; i < NUM_BOOST; i++){
+		boosts[i].draw();
 	}
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};

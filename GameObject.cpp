@@ -149,6 +149,8 @@ void GameObject::update(float dt)
 
 bool GameObject::collided(GameObject *gameObject)
 {
+	if(!this->active || !gameObject->active) return false;	// Check active state
+
 	Vector3 diff = position - gameObject->getPosition();
 	float length = D3DXVec3LengthSq(&diff);
 	float radii = radiusSquared + gameObject->getRadiusSquare();

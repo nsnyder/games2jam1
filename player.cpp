@@ -11,15 +11,16 @@ void Player::draw() {
 
 void Player::increaseScale(float collidedScale) {
 	if(getScale()<2.5) {
-		setScale(getScale()+collidedScale*.05);
+		setScale(getScale()+collidedScale*.25);
 	}
 }
 
 void Player::decreaseScale(float collidedScale) {
-	setScale(getScale()-collidedScale*.05);
+	float newScale = max(0.0f, getScale()-collidedScale*.25);
+	setScale(newScale);
 }
 
 void Player::update(float dt) {
-	decreaseScale(0.5f*dt);
+	decreaseScale(0.05f*dt);
 	GameObject::update(dt);
 }
