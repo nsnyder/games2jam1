@@ -261,8 +261,10 @@ void ColoredCubeApp::updateScene(float dt)
 			obstacles[i].setInActive();
 			if(obstacles[i].getScale() >= player.getScale()) {	// obstacle is bigger
 				player.decreaseScale(obstacles[i].getScale());
+				audio->playCue(RED_CUBE);
 			} else {
 				player.increaseScale(obstacles[i].getScale());
+				audio->playCue(GREEN_CUBE);
 			}
 		}
 	}

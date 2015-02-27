@@ -20,7 +20,9 @@ const wchar_t SOUND_BANK[] = L"audio\\Win\\MySBank.xsb";
 
 const char THEME_MUSIC[] = "theme";
 const char THEME_MUSIC2[] = "music_full";
-
+const char GREEN_CUBE[] = "obstacle_green";
+const char YELLOW_CUBE[] = "obstacle_yellow";
+const char RED_CUBE[] = "obstacle_red";
 
 const int NUM_OBSTACLES = 400;
 const int NUM_BOOST = 100;
