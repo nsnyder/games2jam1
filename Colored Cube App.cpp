@@ -26,6 +26,8 @@
 #include "Plane_NickHalvorsen.h"
 #include "audio.h"
 #include "Ship.h"
+#include <sstream>
+
 class ColoredCubeApp : public D3DApp
 {
 public:
@@ -36,6 +38,7 @@ public:
 	void onResize();
 	void updateScene(float dt);
 	void drawScene(); 
+	ID3DX10Font* Font;
 
 private:
 	void buildFX();
@@ -50,7 +53,7 @@ private:
 	Plane thePlane;
 	Ground theGround;
 
-	Mountain mt;	// Scenery
+	Mountain mt[6];	// Scenery
 	Audio   *audio;
 	Obstacle obstacles[NUM_OBSTACLES];
 	Boost my_boost;
@@ -72,8 +75,11 @@ private:
 
 	float previousPlayerScale;
 
+	float distance;
+
 	std::uniform_real_distribution<float> randomScaleDistribution;
 	std::mt19937 generator;
+
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -119,6 +125,22 @@ void ColoredCubeApp::initApp()
 {
 	D3DApp::initApp();
 
+	distance = 0.0f;
+
+	D3DX10_FONT_DESC fd;
+	fd.Height = 100;
+	fd.Width = 0;
+	fd.Weight = 0;
+	fd.MipLevels = 1;
+	fd.Italic = false;
+	fd.CharSet = OUT_DEFAULT_PRECIS;
+	fd.Quality = DEFAULT_QUALITY;
+	fd.PitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+
+	wcscpy(fd.FaceName, L"Impact");
+
+	D3DX10CreateFontIndirect(md3dDevice, &fd, &Font);
+
 	buildFX();
 	buildVertexLayouts();
 	srand(time(0));
@@ -136,9 +158,23 @@ void ColoredCubeApp::initApp()
 	mBox.init(md3dDevice, mTech);
 	thePlane.init(md3dDevice, 1.0f, DARKBROWN);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
-	mt.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
-	mt.setScale(D3DXVECTOR3(75.0f, 50.0f, 50.0f));
-	mt.setPosition(D3DXVECTOR3(0.0f, -3.0f, 300.0f));
+	for(int i=0; i<6; ++i) {
+		mt[i].init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	}
+	mt[0].setScale(D3DXVECTOR3(75.0f, 50.0f, 1.0f));
+	mt[0].setPosition(D3DXVECTOR3(0.0f, -3.0f, 300.0f));
+	mt[1].setScale(D3DXVECTOR3(300.0f, 25.0f, 1.0f));
+	mt[1].setPosition(D3DXVECTOR3(200.0f, -3.0f, 301.0f));
+	mt[2].setScale(D3DXVECTOR3(55.0f, 40.0f, 1.0f));
+	mt[2].setPosition(D3DXVECTOR3(-70.0f, -3.0f, 302.0f));
+	mt[3].setScale(D3DXVECTOR3(55.0f, 20.0f, 1.0f));
+	mt[3].setPosition(D3DXVECTOR3(370.0f, -3.0f, 302.0f));
+	mt[4].setScale(D3DXVECTOR3(250.0f, 40.0f, 1.0f));
+	mt[4].setPosition(D3DXVECTOR3(-200.0f, -3.0f, 301.0f));
+	mt[5].setScale(D3DXVECTOR3(90.0f, 40.0f, 1.0f));
+	mt[5].setPosition(D3DXVECTOR3(-370.0f, -3.0f, 302.0f));
+
+
 
 	theGround.init(&thePlane, sqrt(1.0f), Vector3(0, -3, 0), Vector3(0, 0, 0), 0, 1);
 	theGround.setMTech(mTech);
@@ -190,14 +226,16 @@ void ColoredCubeApp::updateScene(float dt)
 	if (GetAsyncKeyState(VK_UP)) player.setVelocity(2.0f*player.getVelocity());
 	if (GetAsyncKeyState(VK_DOWN))  player.setVelocity(.5f*player.getVelocity());
 
-
-	if (GetAsyncKeyState(VK_LEFT)) {
-		player.rotateZ(PI*0.15f,0.0f,1.5f);
-		posChange  = + PLAYER_TURN_SPEED * dt;
-	}
-	if (GetAsyncKeyState(VK_RIGHT)) {
-		player.rotateZ(-PI*0.15f,0.0f,1.5f);
-		posChange = - PLAYER_TURN_SPEED * dt;
+	if(player.getActiveState()) {
+		if (GetAsyncKeyState(VK_LEFT)) {
+			player.rotateZ(PI*0.15f,0.0f,1.5f);
+			posChange  = + PLAYER_TURN_SPEED * dt;
+		}
+		if (GetAsyncKeyState(VK_RIGHT)) {
+			player.rotateZ(-PI*0.15f,0.0f,1.5f);
+			posChange = - PLAYER_TURN_SPEED * dt;
+		}
+		distance += -obstacles[0].getVelocity().z*dt*0.5f;
 	}
 
 
@@ -205,9 +243,12 @@ void ColoredCubeApp::updateScene(float dt)
 		setScaleRange(player.getScale()-0.15, player.getScale()+0.75);
 		previousPlayerScale = player.getScale();
 	}
-	D3DXVECTOR3 tmpPosition = mt.getPosition();
-	tmpPosition.x += posChange*0.5;
-	mt.setPosition(tmpPosition);
+	for(int i=0;i<6;++i) {
+		D3DXVECTOR3 tmpPosition = mt[i].getPosition();
+		tmpPosition.x += posChange*0.5;
+		mt[i].setPosition(tmpPosition);
+	}
+
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
@@ -221,39 +262,6 @@ void ColoredCubeApp::updateScene(float dt)
 			} else {
 				player.increaseScale(obstacles[i].getScale());
 			}
-
-			/*
-			if(obstacles[i].getScale() >= player.getScale()) {
-				float absorb = min(ABSORPTION_RATE*dt,player.getScale());
-				player.decreaseScale(absorb);
-				obstacles[i].increaseScale(absorb);
-				D3DXVECTOR3 tmpScale = mt.getScale();
-				tmpScale.x -= absorb*1.5f;
-				tmpScale.y -= absorb;
-				mt.setScale(tmpScale);
-			} else {
-				//obstacles[i].setInActive();
-				//player.increaseScale(obstacles[i].getScale());
-				//obstacles[i].setScale(randomScaleDistribution(generator));
-				float absorb = min(ABSORPTION_RATE*dt,obstacles[i].getScale());
-				player.increaseScale(absorb);
-				obstacles[i].decreaseScale(absorb);
-
-				if(player.getScale() < 2.5f) {
-					D3DXVECTOR3 tmpScale = mt.getScale();
-					tmpScale.x += absorb*1.5f;
-					tmpScale.y += absorb;
-					mt.setScale(tmpScale);
-				}
-				
-				if(obstacles[i].getScale()<=0) {
-					obstacles[i].setInActive();
-					player.increaseScale(obstacles[i].getScale());
-					obstacles[i].setScale(randomScaleDistribution(generator));
-				}
-
-			}
-			*/
 		}
 	}
 
@@ -317,7 +325,9 @@ void ColoredCubeApp::drawScene()
 	theGround.setMTech(mTech);
 	theGround.draw();
 
-	mt.draw();
+	for(int i=0;i<6;++i) {
+		mt[i].draw();
+	}
    
 	// set constants
 	mWVP = mView*mProj;
@@ -372,7 +382,24 @@ void ColoredCubeApp::drawScene()
 	}
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};
+	mFrameStats.clear();
+
+
+
+		std::wostringstream outs;   
+		outs.precision(6);
+		outs << L"Distance: " << static_cast<int>(distance/2);
+		mFrameStats.append(outs.str());
+
 	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
+	if(playerScale < 0.50f) {
+		player.setScale(0.05f);
+		player.setInActive();
+		D3DXCOLOR fontColor(0.0f, 0.0f, 0.0f, 1.0f);
+		RECT rectangle = {200, 200, 0, 0};
+		Font->DrawText(0, L"Game Over", -1, &rectangle, DT_NOCLIP, fontColor);
+
+	}
 
 	mSwapChain->Present(0, 0);
 }
