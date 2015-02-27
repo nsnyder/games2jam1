@@ -391,8 +391,9 @@ void ColoredCubeApp::drawScene()
 
 
 		std::wostringstream outs;   
-		outs.precision(6);
-		outs << L"Distance: " << static_cast<int>(distance/2);
+		outs.precision(3);
+		outs << L"Distance: " << static_cast<int>(distance/2) <<
+			"\nScale: " << player.getScale();
 		mFrameStats.append(outs.str());
 
 	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
