@@ -219,6 +219,8 @@ void ColoredCubeApp::updateScene(float dt)
 	// make the camera look more into the distance
 	//mPhi = 1;
 
+	if (GetAsyncKeyState(VK_ESCAPE)) exit(0);
+
 	float turnSpeed = 100;
 	float posChange = 0.0f;
 
