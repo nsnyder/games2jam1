@@ -125,7 +125,11 @@ void ColoredCubeApp::initApp()
 
 	//Play startup music
 	init_audio();
-	audio->playCue(THEME_MUSIC);
+	int tune = rand() % 2;
+	if (tune == 0)
+		audio->playCue(THEME_MUSIC);
+	else if (tune == 1)
+		audio->playCue(THEME_MUSIC2);
 
 	my_boost.init(md3dDevice, mTech);
 	redBox.init(md3dDevice, mTech);
@@ -134,9 +138,9 @@ void ColoredCubeApp::initApp()
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	mt.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 	mt.setScale(D3DXVECTOR3(75.0f, 50.0f, 50.0f));
-	mt.setPosition(D3DXVECTOR3(0.0f, 0.0f, 300.0f));
+	mt.setPosition(D3DXVECTOR3(0.0f, -3.0f, 300.0f));
 
-	theGround.init(&thePlane, sqrt(1.0f), Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
+	theGround.init(&thePlane, sqrt(1.0f), Vector3(0, -3, 0), Vector3(0, 0, 0), 0, 1);
 	theGround.setMTech(mTech);
 	player.init(&mBox, sqrt(2.0f), Vector3(0, 0, 5), Vector3(0, 0, 0), 0, 1);
 	previousPlayerScale = 1.0f;
@@ -294,6 +298,8 @@ void ColoredCubeApp::updateScene(float dt)
 void ColoredCubeApp::drawScene()
 {
 	D3DApp::drawScene();
+
+	mClearColor = D3DXCOLOR(169.0f / 255.0f, 220.0f / 255.0f, 255.0f / 255.0f, 1.0f);
 
 	// Restore default states, input layout and primitive topology 
 	// because mFont->DrawText changes them.  Note that we can 
