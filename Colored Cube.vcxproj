@@ -94,6 +94,7 @@
     <ClCompile Include="boostObject.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Colored Cube App.cpp" />
+    <ClCompile Include="crashGeometry_NoahCusimano.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
@@ -111,6 +112,7 @@
     <ClInclude Include="boostObject.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="crashGeometry_NoahCusimano.h" />
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="GameObject.h" />

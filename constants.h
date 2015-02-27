@@ -25,6 +25,7 @@ const char YELLOW_CUBE[] = "obstacle_yellow";
 const char RED_CUBE[] = "obstacle_red";
 
 const int NUM_OBSTACLES = 400;
+const int NUM_CRASH_OBJECTS = 10;
 const int NUM_BOOST = 100;
 const int AREA_WIDTH = 600;
 const int AREA_DEPTH = 200;

@@ -27,6 +27,7 @@
 #include "audio.h"
 #include "Ship.h"
 #include <sstream>
+#include "crashGeometry_NoahCusimano.h"
 
 class ColoredCubeApp : public D3DApp
 {
@@ -56,6 +57,8 @@ private:
 	Mountain mt[6];	// Scenery
 	Audio   *audio;
 	Obstacle obstacles[NUM_OBSTACLES];
+	crashGeometry crashObject;//[NUM_CRASH_OBJECTS];
+
 	Boost my_boost;
 	boostObject boosts[NUM_BOOST];
 
@@ -182,6 +185,21 @@ void ColoredCubeApp::initApp()
 	previousPlayerScale = 1.0f;
 	player.setMTech(mTech);
 
+
+	crashObject.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+	crashObject.setScale(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	crashObject.setPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+
+	
+	/*for (int i = 0; i < NUM_CRASH_OBJECTS; i++) 
+	{
+		crashObjects[i].init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+		crashObjects[i].setScale(D3DXVECTOR3(2.0f, 2.0f, 2.0f));
+		crashObjects[i].setPosition(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}*/
+
+	
+
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		float randScale = randomScaleDistribution(generator);
 		// spawn the obstacles evenly over the z direction. if they spawn too close to the player, hide them until they hit the back wall.
@@ -250,25 +268,52 @@ void ColoredCubeApp::updateScene(float dt)
 		tmpPosition.x += posChange*0.5;
 		mt[i].setPosition(tmpPosition);
 	}
+	//NEC
+	
+	
+
+	
+	//crashObject.setPositionX(crashObject.getPosition().x + posChange);
+	//crashObject.setVelocity(Vector3(0, 0, -OBSTACLE_SPEED * player.getScale() / 2));
+	//crashObject.update(dt);
+	int crashCounter = rand()%50;
+	if (crashCounter == 1) crashObject.setScale(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
 		obstacles[i].setVelocity(Vector3(0, 0, -OBSTACLE_SPEED * player.getScale() / 2));
 		obstacles[i].update(dt);
+
+		
+
 		if(obstacles[i].collided(&player)) {
+			
+			int crashCounter = rand()%3;
+			if(crashCounter == 1) crashObject.setScale(D3DXVECTOR3(3.0f, 0.5f, 3.0f));
+			else if (crashCounter == 2) crashObject.setScale(D3DXVECTOR3(2.0f, 2.0f, 2.0f));
+			else crashObject.setScale(D3DXVECTOR3(5.0f, 0.5f, 0.5f));
+			
+			Vector3 obstaclePos = obstacles[i].getPosition();
+			crashObject.setPosition(D3DXVECTOR3(obstaclePos.x, obstaclePos.y, obstaclePos.z));
+
 
 			obstacles[i].setInActive();
 			if(obstacles[i].getScale() >= player.getScale()) {	// obstacle is bigger
 				player.decreaseScale(obstacles[i].getScale());
 				audio->playCue(RED_CUBE);
+
 			} else {
 				player.increaseScale(obstacles[i].getScale());
-				audio->playCue(GREEN_CUBE);
+				int randSound =rand()%2;
+				
+				if(randSound == 1) audio->playCue(GREEN_CUBE);
+				else audio->playCue(YELLOW_CUBE);
+
 			}
 		}
+		
 	}
-
 
 	for (int i = 0; i < NUM_BOOST; i++) {
 		boosts[i].setPositionX(boosts[i].getPosition().x + posChange);
@@ -323,6 +368,8 @@ void ColoredCubeApp::drawScene()
     
 	mfxColorVar->SetInt(NO_CHANGE);
 	//mAxes.draw();
+	
+	crashObject.draw();
 
 	mWVP = theGround.getWorldMatrix()  *mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
@@ -379,6 +426,14 @@ void ColoredCubeApp::drawScene()
 		mfxWVPVar->SetMatrix((float*)&mWVP);
 		obstacles[i].draw();
 	}
+	
+	
+	
+	/*for(int i = 0; i < NUM_CRASH_OBJECTS; i++){
+		crashObjects[i].draw();
+	}*/
+
+
 
 	mfxColorVar->SetInt(NO_CHANGE);
 	for(int i = 0; i < NUM_BOOST; i++){

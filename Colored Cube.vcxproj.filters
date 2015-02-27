@@ -16,6 +16,7 @@
     <ClCompile Include="Plane_NickHalvorsen.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="audio.cpp" />
+    <ClCompile Include="crashGeometry_NoahCusimano.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Axes.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="audio.h" />
     <ClInclude Include="Ship.h" />
+    <ClInclude Include="crashGeometry_NoahCusimano.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.fx" />
