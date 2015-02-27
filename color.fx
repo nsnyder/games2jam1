@@ -34,6 +34,9 @@ void VS(float3 iPosL  : POSITION,
 		float green = lerp(1.0f, 0.0f, diff);
 		oColor = float4(red, green, 0.0f, 1.0f);
 		break;
+	case 4:
+		oColor = float4(1.0f, 1.0f, 0.0f, 1.0f);
+		break;
 	default:
 		// Just pass vertex color into the pixel shader.
 		oColor = iColor;

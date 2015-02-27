@@ -121,6 +121,7 @@
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="Plane_NickHalvorsen.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Ship.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>

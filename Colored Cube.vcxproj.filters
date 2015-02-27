@@ -35,6 +35,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="audio.h" />
+    <ClInclude Include="Ship.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.fx" />

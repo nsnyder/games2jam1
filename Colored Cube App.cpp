@@ -25,6 +25,7 @@
 #include "Ground_NickHalvorsen.h"
 #include "Plane_NickHalvorsen.h"
 #include "audio.h"
+#include "Ship.h"
 class ColoredCubeApp : public D3DApp
 {
 public:
@@ -44,7 +45,7 @@ private:
 private:
 	
 	Player player;
-	Box mBox, redBox;
+	Box redBox, mBox;
 	Axes mAxes;
 	Plane thePlane;
 	Ground theGround;
@@ -93,7 +94,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 
 ColoredCubeApp::ColoredCubeApp(HINSTANCE hInstance)
 : D3DApp(hInstance), mFX(0), mTech(0), mVertexLayout(0),
-  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.30f), randomScaleDistribution(0.25f, 2.25f)
+  mfxWVPVar(0), mTheta(0.0f), mPhi(PI*0.30f), randomScaleDistribution(0.1f, 2.25f)
 {
 	D3DXMatrixIdentity(&mView);
 	D3DXMatrixIdentity(&mProj);
@@ -206,6 +207,7 @@ void ColoredCubeApp::updateScene(float dt)
 	// update obstacle positions
 	for (int i = 0; i < NUM_OBSTACLES; i++) {
 		obstacles[i].setPositionX(obstacles[i].getPosition().x + posChange);
+		obstacles[i].setVelocity(Vector3(0, 0, -OBSTACLE_SPEED * player.getScale() / 2));
 		obstacles[i].update(dt);
 		if(obstacles[i].collided(&player)) {
 
@@ -331,6 +333,8 @@ void ColoredCubeApp::drawScene()
 		// Check whether it's bigger or smaller, color accordingly
 		if(obstacles[i].getScale() >= playerScale) {		// Larger
 			mfxColorVar->SetInt(LARGER);
+		} else if (obstacles[i].getScale() + .2 >= playerScale) {
+			mfxColorVar->SetInt(4);
 		} else {	// Smaller
 			mfxColorVar->SetInt(SMALLER);
 		}
