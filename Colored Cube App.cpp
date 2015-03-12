@@ -133,10 +133,12 @@ void ColoredCubeApp::initApp()
 	//Play startup music
 	init_audio();
 	int tune = rand() % 2;
+	/*
 	if (tune == 0)
 		audio->playCue(THEME_MUSIC);
 	else if (tune == 1)
 		audio->playCue(THEME_MUSIC2);
+	*/
 
 	redBox.init(md3dDevice, mTech);
 	mBox.init(md3dDevice, mTech);
