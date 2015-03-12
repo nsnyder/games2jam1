@@ -39,8 +39,11 @@ private:
  
 private:
 	
-	Box redBox, mBox;
+	Box mBox;
 	Axes mAxes;
+
+	GameObject player;
+	GameObject obstacles[OBSTACLE_COUNT];
 
 	Audio   *audio;
 
@@ -140,9 +143,18 @@ void ColoredCubeApp::initApp()
 		audio->playCue(THEME_MUSIC2);
 	*/
 
-	redBox.init(md3dDevice, mTech);
 	mBox.init(md3dDevice, mTech);
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
+
+	player.init(&mBox, 1.0f, Vector3(0.0f, 0.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+	player.setMTech(mTech);
+	srand(time(0));
+	for(int i=0;i<OBSTACLE_COUNT;++i) {
+		int x = rand() % WIDTH - WIDTH / 2;
+		int z = rand() % DEPTH;
+		obstacles[i].init(&mBox, 1.0f, Vector3(x, 0.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+		obstacles[i].setMTech(mTech);
+	}
 
 }
 
@@ -204,8 +216,12 @@ void ColoredCubeApp::drawScene()
 	md3dDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
     md3dDevice->IASetInputLayout(mVertexLayout);
     
-	mfxColorVar->SetInt(NO_CHANGE);
 	mAxes.draw();
+
+	player.draw();
+	for(int i=0;i<OBSTACLE_COUNT;++i) {
+		obstacles[i].draw();
+	}
 	
 	// how to draw
 	//mWVP = myObject.getWorldMatrix()  *mView*mProj;
