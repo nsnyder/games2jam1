@@ -154,8 +154,7 @@ void ColoredCubeApp::initApp()
 	}
 
 	
-	theGround.init(&mPlane, 1, Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
-	theGround.setScale(GAME_SIZE);
+	theGround.init(&mPlane, 1, Vector3(0, 0, 0), Vector3(0, 0, 0), 0, GAME_SIZE);
 }
 
 void ColoredCubeApp::onResize()
@@ -173,8 +172,8 @@ void ColoredCubeApp::updateScene(float dt)
 	// Update angles based on input to orbit camera around box.
 	 if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
 	 if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	 //if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	 //if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	 if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	 if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
 	 theGround.update(dt);
 
@@ -183,16 +182,12 @@ void ColoredCubeApp::updateScene(float dt)
 
 	if (GetAsyncKeyState(VK_ESCAPE)) exit(0);
 
-	float turnSpeed = 100;
-	float posChange = 0.0f;
-
-
 	// Restrict the angle mPhi. 
-	//if( mPhi < 0.1f )	mPhi = 0.1f;
-	//if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
+	if( mPhi < 0.1f )	mPhi = 0.1f;
+	if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
 
 
-	if (mPhi != 0.1f) mPhi = 0.1f;
+	//if (mPhi != 0.1f) mPhi = 0.1f;
 
 	// Convert Spherical to Cartesian coordinates: mPhi measured from +y
 	// and mTheta measured counterclockwise from -z.
