@@ -9,6 +9,8 @@
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="audio.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Axes.h" />
@@ -21,6 +23,8 @@
     <ClInclude Include="Line.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="audio.h" />
+    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Ground.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="color.fx" />
