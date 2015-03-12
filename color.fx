@@ -23,6 +23,9 @@ void VS(float3 iPosL  : POSITION,
 	case 0:		// Player
 		oColor = float4(0.0f, 0.0f, 1.0f, 1.0f);	// Blue
 		break;
+	case 1:
+		oColor = float4(0.4f, 0.8f, 1.0f, .5f); // invulnerable color
+		break;
 	default:
 		oColor = iColor;	// Red
 		break;

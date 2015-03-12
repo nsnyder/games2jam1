@@ -149,7 +149,7 @@ void ColoredCubeApp::initApp()
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
 	player.init(&mBox, 1.0f, Vector3(0.0f, -1.0f, DEPTH/2.0f+TRANSLATE),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
-	player.setSpeed(8);
+	player.setSpeed(PLAYER_SPEED);
 
 	player.setMTech(mTech);
 	srand(time(0));
@@ -194,13 +194,13 @@ void ColoredCubeApp::updateScene(float dt)
 	D3DApp::updateScene(dt);
 
 	// Update angles based on input to orbit camera around box.
-	 if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
-	 if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	 if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	 if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	 //if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
+	 //if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
+	 //if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	 //if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
 	 // simulates what happens when you hit a cube (collision detection not implemented yet)
-	 if (GetAsyncKeyState('G') & 0x8000) gameOver = true;
+	 //if (GetAsyncKeyState('G') & 0x8000) gameOver = true;
 
 	 theGround.update(dt);
 
@@ -218,7 +218,11 @@ void ColoredCubeApp::updateScene(float dt)
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * -1));
 		 }
+
+		 if (obstacles[i].collided(&player) && totalTime > INVULN_TIME)
+			 gameOver = true;
 	 }
+
 
 
 	 if (!gameOver)
@@ -274,9 +278,11 @@ void ColoredCubeApp::updateScene(float dt)
 
 	if (GetAsyncKeyState(VK_ESCAPE)) exit(0);
 
+	mPhi = 0.4f;
+
 	// Restrict the angle mPhi. 
-	if( mPhi < 0.1f )	mPhi = 0.1f;
-	if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
+	//if( mPhi < 0.1f )	mPhi = 0.1f;
+	//if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
 
 
 	//if (mPhi != 0.1f) mPhi = 0.1f;
@@ -315,14 +321,16 @@ void ColoredCubeApp::drawScene()
 	mfxWVPVar->SetMatrix((float*)&mWVP);
 
 	mfxColorVar->SetInt(-1);
-	//player.setMTech(mTech);
-
 	player.draw();
 
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
 		mWVP = obstacles[i].getWorldMatrix() * mView * mProj;
 		mfxWVPVar->SetMatrix((float*)&mWVP);
-		mfxColorVar->SetInt(0);
+
+		if (totalTime < INVULN_TIME)
+			mfxColorVar->SetInt(1);
+		else
+			mfxColorVar->SetInt(0);
 		//obstacles[i].setMTech(mTech);
 		obstacles[i].draw();
 	}
@@ -346,7 +354,7 @@ void ColoredCubeApp::drawScene()
 
 	std::wostringstream outs;   
 	outs.precision(3);
-	outs << L"Time survived: " << totalTime << " seconds\nDanger Points (stay close to obstacles): " << static_cast<int>(proximityPoints) << "\nPress g to simulate game over";
+	outs << L"Time survived: " << totalTime << " seconds\nDanger Points (stay close to obstacles): " << static_cast<int>(proximityPoints);
 	mFrameStats.append(outs.str());
 
 	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, WHITE);

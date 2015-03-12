@@ -21,13 +21,14 @@ const int WIDTH = GAME_SIZE;
 const float TRANSLATE = 7.5f;
 
 const int OBSTACLE_COUNT = 6;
-const int OBSTACLE_SPEED = 5;
+const int OBSTACLE_SPEED = 7;
 
 const wchar_t WAVE_BANK[]  = L"audio\\Win\\MyWBank.xwb";
 // SOUND_BANK must be location of .xsb file.
 const wchar_t SOUND_BANK[] = L"audio\\Win\\MySBank.xsb";
 
-const int PLAYER_SPEED = 10;
+const int PLAYER_SPEED = 12;
+const int INVULN_TIME = 2;
 
 #endif
 
