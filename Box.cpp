@@ -4,6 +4,7 @@
 
 #include "Box.h"
 #include "Vertex.h"
+#include "constants.h"
 
 Box::Box()
 : mNumVertices(0), mNumFaces(0), md3dDevice(0), mVB(0), mIB(0)
@@ -29,12 +30,12 @@ void Box::init(ID3D10Device* device, ID3D10EffectTechnique* new_mTech)
     Vertex vertices[] =
     {
 		{D3DXVECTOR3(-1.0f, -1.0f, -1.0f), RED},
-		{D3DXVECTOR3(-1.0f, +1.0f, -1.0f), RED},
-		{D3DXVECTOR3(+1.0f, +1.0f, -1.0f), RED},
+		{D3DXVECTOR3(-1.0f, +1.0f, -1.0f), D3DXCOLOR(1.0f, 0.7f, 0.7f, 1.0f)},
+		{D3DXVECTOR3(+1.0f, +1.0f, -1.0f), D3DXCOLOR(1.0f, 0.7f, 0.7f, 1.0f) },
 		{D3DXVECTOR3(+1.0f, -1.0f, -1.0f), RED},
 		{D3DXVECTOR3(-1.0f, -1.0f, +1.0f), RED},
-		{D3DXVECTOR3(-1.0f, +1.0f, +1.0f), RED},
-		{D3DXVECTOR3(+1.0f, +1.0f, +1.0f), RED},
+		{D3DXVECTOR3(-1.0f, +1.0f, +1.0f), D3DXCOLOR(1.0f, 0.7f, 0.7f, 1.0f) },
+		{D3DXVECTOR3(+1.0f, +1.0f, +1.0f), D3DXCOLOR(1.0f, 0.7f, 0.7f, 1.0f) },
 		{D3DXVECTOR3(+1.0f, -1.0f, +1.0f), RED},
     };
 

@@ -72,6 +72,11 @@ private:
 	std::uniform_real_distribution<float> randomScaleDistribution;
 	std::mt19937 generator;
 
+	float totalTime;
+	float proximityPoints;
+
+	bool gameOver;
+
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -144,6 +149,7 @@ void ColoredCubeApp::initApp()
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
 	player.init(&mBox, 1.0f, Vector3(0.0f, 0.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+	player.setSpeed(8);
 	player.setMTech(mTech);
 	srand(time(0));
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
@@ -151,11 +157,27 @@ void ColoredCubeApp::initApp()
 		int z = rand() % DEPTH;
 		obstacles[i].init(&mBox, 1.0f, Vector3(x, 0.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 		obstacles[i].setMTech(mTech);
-		obstacles[i].setVelocity(Vector3(1, 0, 1));
-	}
+		obstacles[i].setScale(0.75);
 
+		int dir = rand() % 4;
+		Vector3 obstacleVelocity;
+
+		switch (dir)
+		{
+		case 0: obstacleVelocity = Vector3(OBSTACLE_SPEED, 0, OBSTACLE_SPEED); break;
+		case 1: obstacleVelocity = Vector3(-1 * OBSTACLE_SPEED, 0, OBSTACLE_SPEED); break;
+		case 2: obstacleVelocity = Vector3(OBSTACLE_SPEED, 0, -1 * OBSTACLE_SPEED); break;
+		case 3: obstacleVelocity = Vector3(-1 * OBSTACLE_SPEED, 0, -1 * OBSTACLE_SPEED); break;
+		}
+
+		obstacles[i].setVelocity(obstacleVelocity);
+	}
 	
 	theGround.init(&mPlane, 1, Vector3(0, 0, 0), Vector3(0, 0, 0), 0, GAME_SIZE);
+
+	totalTime = 0;
+	proximityPoints = 0;
+	gameOver = false;
 }
 
 void ColoredCubeApp::onResize()
@@ -176,18 +198,21 @@ void ColoredCubeApp::updateScene(float dt)
 	 if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
 	 if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
+	 // simulates what happens when you hit a cube (collision detection not implemented yet)
+	 if (GetAsyncKeyState('G') & 0x8000) gameOver = true;
+
 	 theGround.update(dt);
 
 	 for (int i = 0; i < OBSTACLE_COUNT; i++)
 	 {
 		 Vector3 oldPos = obstacles[i].getPosition();
 		 obstacles[i].update(dt);
-		 if (obstacles[i].getPosition().x < 0 - GAME_SIZE / 2 || obstacles[i].getPosition().x > GAME_SIZE / 2)
+		 if (abs(obstacles[i].getPosition().x) + obstacles[i].getScale() > GAME_SIZE)
 		 {
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x * -1, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z));
 		 }
-		 if (obstacles[i].getPosition().z < 0 - GAME_SIZE / 2 || obstacles[i].getPosition().z > GAME_SIZE / 2)
+		 if (abs(obstacles[i].getPosition().z) + obstacles[i].getScale() > GAME_SIZE)
 		 {
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * -1));
@@ -195,8 +220,56 @@ void ColoredCubeApp::updateScene(float dt)
 	 }
 
 
-	// make the camera look more into the distance
-	//mPhi = 1;
+	 if (!gameOver)
+	 {
+		 int directionX = 0;
+		 int directionZ = 0;
+
+		 if (GetAsyncKeyState(VK_LEFT) & 0x8000)	directionX = -1;
+		 if (GetAsyncKeyState(VK_RIGHT) & 0x8000)	directionX = 1;
+		 if (GetAsyncKeyState(VK_UP) & 0x8000)		directionZ = 1;
+		 if (GetAsyncKeyState(VK_DOWN) & 0x8000)	directionZ = -1;
+
+		 player.setVelocity(Vector3(player.getSpeed() * directionX, 0, player.getSpeed() * directionZ));
+
+
+		 totalTime += dt;
+
+		 for (int i = 0; i < OBSTACLE_COUNT; i++)
+		 {
+			 if (abs(player.getPosition().x - obstacles[i].getPosition().x) + abs(player.getPosition().z - obstacles[i].getPosition().z) < 5)
+			 {
+				 proximityPoints += dt * 6;
+			 }
+		 }
+	 }
+	 else // gameOver
+	 {
+		 // slow obstacles down for game over
+		 for (int i = 0; i < OBSTACLE_COUNT; i++)
+		 {
+			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x * .998, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * .998));
+
+			 if (abs(obstacles[i].getVelocity().x) + abs(obstacles[i].getVelocity().y) + abs(obstacles[i].getVelocity().z) < .1)
+				 obstacles[i].setVelocity(Vector3(0, 0, 0));
+		 }
+
+		 // make player shrink into nothingness
+		 player.setScale(player.getScale() * .998); 
+		 player.setVelocity(Vector3(player.getVelocity().x * .9995, player.getVelocity().y, player.getVelocity().z * .9995));
+
+	 }
+
+	 Vector3 oldPos = player.getPosition();
+
+	 player.update(dt);
+
+	 if (!gameOver)
+	 {
+		 if (abs(player.getPosition().x) + player.getScale() > GAME_SIZE || abs(player.getPosition().z) + player.getScale() > GAME_SIZE)
+			 player.setPosition(oldPos);
+	 }
+
 
 	if (GetAsyncKeyState(VK_ESCAPE)) exit(0);
 
@@ -218,6 +291,7 @@ void ColoredCubeApp::updateScene(float dt)
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 up(0.0f, 1.0f, 0.0f);
 	D3DXMatrixLookAtLH(&mView, &pos, &target, &up);
+
 }
 
 void ColoredCubeApp::drawScene()
@@ -234,11 +308,17 @@ void ColoredCubeApp::drawScene()
 	md3dDevice->OMSetBlendState(0, blendFactors, 0xffffffff);
     md3dDevice->IASetInputLayout(mVertexLayout);
     
-	mAxes.draw();
+	//mAxes.draw();
+
 	mWVP = player.getWorldMatrix() * mView * mProj;
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	player.setMTech(mTech);
 	player.draw();
+
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
 		mWVP = obstacles[i].getWorldMatrix() * mView * mProj;
+		mfxWVPVar->SetMatrix((float*)&mWVP);
+		obstacles[i].setMTech(mTech);
 		obstacles[i].draw();
 	}
 	
@@ -258,12 +338,19 @@ void ColoredCubeApp::drawScene()
 	mFrameStats.clear();
 
 
-	//std::wostringstream outs;   
-	//outs.precision(3);
-	//outs << L"Hello World";
-	//mFrameStats.append(outs.str());
+	std::wostringstream outs;   
+	outs.precision(3);
+	outs << L"Time survived: " << totalTime << " seconds\nDanger Points (stay close to obstacles): " << static_cast<int>(proximityPoints) << "\nPress g to simulate game over";
+	mFrameStats.append(outs.str());
 
-	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, BLACK);
+	mFont->DrawText(0, mFrameStats.c_str(), -1, &R, DT_NOCLIP, WHITE);
+
+	if (gameOver)
+	{
+		RECT rectangle = { 200, 200, 0, 0 };
+		mFont->DrawText(0, L"Game Over", -1, &rectangle, DT_NOCLIP, WHITE);
+	}
+
 	mSwapChain->Present(0, 0);
 }
 
