@@ -151,6 +151,7 @@ void ColoredCubeApp::initApp()
 		int z = rand() % DEPTH;
 		obstacles[i].init(&mBox, 1.0f, Vector3(x, 0.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 		obstacles[i].setMTech(mTech);
+		obstacles[i].setVelocity(Vector3(1, 0, 1));
 	}
 
 	
@@ -176,6 +177,22 @@ void ColoredCubeApp::updateScene(float dt)
 	 if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
 
 	 theGround.update(dt);
+
+	 for (int i = 0; i < OBSTACLE_COUNT; i++)
+	 {
+		 Vector3 oldPos = obstacles[i].getPosition();
+		 obstacles[i].update(dt);
+		 if (obstacles[i].getPosition().x < 0 - GAME_SIZE / 2 || obstacles[i].getPosition().x > GAME_SIZE / 2)
+		 {
+			 obstacles[i].setPosition(oldPos);
+			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x * -1, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z));
+		 }
+		 if (obstacles[i].getPosition().z < 0 - GAME_SIZE / 2 || obstacles[i].getPosition().z > GAME_SIZE / 2)
+		 {
+			 obstacles[i].setPosition(oldPos);
+			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * -1));
+		 }
+	 }
 
 	// make the camera look more into the distance
 	//mPhi = 1;

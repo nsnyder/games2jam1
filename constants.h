@@ -13,8 +13,8 @@
 #define ToRadian D3DXToRadian
 #define ToDegree D3DXToDegree
 
-const int DEPTH = 50;
-const int WIDTH = 50;
+const int DEPTH = 8;
+const int WIDTH = 8;
 const int OBSTACLE_COUNT = 5;
 
 const wchar_t WAVE_BANK[]  = L"audio\\Win\\MyWBank.xwb";
