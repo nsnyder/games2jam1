@@ -177,6 +177,11 @@ void ColoredCubeApp::updateScene(float dt)
 
 	 theGround.update(dt);
 
+	 player.update(dt);
+	 for(int i=0;i<OBSTACLE_COUNT;++i) {
+		 obstacles[i].update(dt);
+	 }
+
 	// make the camera look more into the distance
 	//mPhi = 1;
 
@@ -217,9 +222,10 @@ void ColoredCubeApp::drawScene()
     md3dDevice->IASetInputLayout(mVertexLayout);
     
 	mAxes.draw();
-
+	mWVP = player.getWorldMatrix() * mView * mProj;
 	player.draw();
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
+		mWVP = obstacles[i].getWorldMatrix() * mView * mProj;
 		obstacles[i].draw();
 	}
 	
