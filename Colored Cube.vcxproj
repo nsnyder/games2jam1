@@ -90,40 +90,23 @@
   <ItemGroup>
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="Axes.cpp" />
-    <ClCompile Include="boost.cpp" />
-    <ClCompile Include="boostObject.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Colored Cube App.cpp" />
-    <ClCompile Include="crashGeometry_NoahCusimano.cpp" />
     <ClCompile Include="d3dApp.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
-    <ClCompile Include="Ground_NickHalvorsen.cpp" />
     <ClCompile Include="Line.cpp" />
-    <ClCompile Include="Mountain - Nathan Snyder.cpp" />
-    <ClCompile Include="Obstacle.cpp" />
-    <ClCompile Include="Plane_NickHalvorsen.cpp" />
-    <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="audio.h" />
     <ClInclude Include="Axes.h" />
-    <ClInclude Include="boost.h" />
-    <ClInclude Include="boostObject.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="constants.h" />
-    <ClInclude Include="crashGeometry_NoahCusimano.h" />
     <ClInclude Include="d3dApp.h" />
     <ClInclude Include="d3dUtil.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
-    <ClInclude Include="Ground_NickHalvorsen.h" />
     <ClInclude Include="Line.h" />
-    <ClInclude Include="Mountain - Nathan Snyder.h" />
-    <ClInclude Include="Obstacle.h" />
-    <ClInclude Include="Plane_NickHalvorsen.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="Ship.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
