@@ -18,6 +18,8 @@ const int GAME_SIZE = 10;
 const int DEPTH = GAME_SIZE;
 const int WIDTH = GAME_SIZE;
 
+const float TRANSLATE = 7.5f;
+
 const int OBSTACLE_COUNT = 6;
 const int OBSTACLE_SPEED = 5;
 

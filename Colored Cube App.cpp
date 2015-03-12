@@ -148,7 +148,7 @@ void ColoredCubeApp::initApp()
 	mPlane.init(md3dDevice, 1, D3DXCOLOR(.1, .5, .4, 1));
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
-	player.init(&mBox, 1.0f, Vector3(0.0f, 1.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+	player.init(&mBox, 1.0f, Vector3(0.0f, -1.0f, DEPTH/2.0f+TRANSLATE),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 	player.setSpeed(8);
 
 	player.setMTech(mTech);
@@ -156,7 +156,7 @@ void ColoredCubeApp::initApp()
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
 		int x = rand() % WIDTH - WIDTH / 2;
 		int z = rand() % DEPTH;
-		obstacles[i].init(&mBox, 1.0f, Vector3(x, 1.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+		obstacles[i].init(&mBox, 1.0f, Vector3(x, -1.0f, z+TRANSLATE),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 		obstacles[i].setMTech(mTech);
 		obstacles[i].setScale(0.75);
 
@@ -174,7 +174,7 @@ void ColoredCubeApp::initApp()
 		obstacles[i].setVelocity(obstacleVelocity);
 	}
 	
-	theGround.init(&mPlane, 1, Vector3(0, 0, 0), Vector3(0, 0, 0), 0, GAME_SIZE);
+	theGround.init(&mPlane, 1, Vector3(0, -2.0f, 0+TRANSLATE), Vector3(0, 0, 0), 0, GAME_SIZE);
 
 	totalTime = 0;
 	proximityPoints = 0;
@@ -213,7 +213,7 @@ void ColoredCubeApp::updateScene(float dt)
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x * -1, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z));
 		 }
-		 if (abs(obstacles[i].getPosition().z) + obstacles[i].getScale() > GAME_SIZE)
+		 if (abs(obstacles[i].getPosition().z-TRANSLATE) + obstacles[i].getScale() > GAME_SIZE)
 		 {
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * -1));
@@ -267,7 +267,7 @@ void ColoredCubeApp::updateScene(float dt)
 
 	 if (!gameOver)
 	 {
-		 if (abs(player.getPosition().x) + player.getScale() > GAME_SIZE || abs(player.getPosition().z) + player.getScale() > GAME_SIZE)
+		 if (abs(player.getPosition().x) + player.getScale() > GAME_SIZE || abs(player.getPosition().z-TRANSLATE) + player.getScale() > GAME_SIZE)
 			 player.setPosition(oldPos);
 	 }
 
