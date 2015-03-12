@@ -143,13 +143,13 @@ void ColoredCubeApp::initApp()
 	mPlane.init(md3dDevice, 1, D3DXCOLOR(.1, .5, .4, 1));
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
-	player.init(&mBox, 1.0f, Vector3(0.0f, 0.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+	player.init(&mBox, 1.0f, Vector3(0.0f, 1.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 	player.setMTech(mTech);
 	srand(time(0));
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
 		int x = rand() % WIDTH - WIDTH / 2;
 		int z = rand() % DEPTH;
-		obstacles[i].init(&mBox, 1.0f, Vector3(x, 0.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
+		obstacles[i].init(&mBox, 1.0f, Vector3(x, 1.0f, z),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
 		obstacles[i].setMTech(mTech);
 	}
 
@@ -223,9 +223,13 @@ void ColoredCubeApp::drawScene()
     
 	mAxes.draw();
 	mWVP = player.getWorldMatrix() * mView * mProj;
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	mfxColorVar->SetInt(-1);
 	player.draw();
 	for(int i=0;i<OBSTACLE_COUNT;++i) {
 		mWVP = obstacles[i].getWorldMatrix() * mView * mProj;
+		mfxWVPVar->SetMatrix((float*)&mWVP);
+		mfxColorVar->SetInt(0);
 		obstacles[i].draw();
 	}
 	
@@ -235,6 +239,7 @@ void ColoredCubeApp::drawScene()
 	//myObject.setMTech(mTech);
 	//myObject.draw();
 
+	mfxColorVar->SetInt(-1);
 	mWVP = theGround.getWorldMatrix()  *mView*mProj;
 	mfxWVPVar->SetMatrix((float*)&mWVP);
 	theGround.setMTech(mTech);

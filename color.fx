@@ -19,7 +19,16 @@ void VS(float3 iPosL  : POSITION,
 	// Transform to homogeneous clip space.
 	oPosH = mul(float4(iPosL, 1.0f), gWVP);
 
-	oColor = iColor;
+	switch(mode) {
+	case 0:		// Player
+		oColor = float4(0.0f, 0.0f, 1.0f, 1.0f);	// Blue
+		break;
+	default:
+		oColor = iColor;	// Red
+		break;
+	}
+
+	//oColor = iColor;
 	
 }
 
