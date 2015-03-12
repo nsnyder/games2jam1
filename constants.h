@@ -13,7 +13,7 @@
 #define ToRadian D3DXToRadian
 #define ToDegree D3DXToDegree
 
-const float GAME_SIZE = 10;
+const int GAME_SIZE = 10;
 
 const int DEPTH = GAME_SIZE;
 const int WIDTH = GAME_SIZE;
@@ -23,8 +23,6 @@ const int OBSTACLE_COUNT = 5;
 const wchar_t WAVE_BANK[]  = L"audio\\Win\\MyWBank.xwb";
 // SOUND_BANK must be location of .xsb file.
 const wchar_t SOUND_BANK[] = L"audio\\Win\\MySBank.xsb";
-
-const float GAME_SIZE = 10;
 
 
 #endif

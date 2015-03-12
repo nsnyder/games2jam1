@@ -192,6 +192,7 @@ void ColoredCubeApp::updateScene(float dt)
 			 obstacles[i].setPosition(oldPos);
 			 obstacles[i].setVelocity(Vector3(obstacles[i].getVelocity().x, obstacles[i].getVelocity().y, obstacles[i].getVelocity().z * -1));
 		 }
+	 }
 
 
 	// make the camera look more into the distance
