@@ -21,6 +21,8 @@ const wchar_t WAVE_BANK[]  = L"audio\\Win\\MyWBank.xwb";
 // SOUND_BANK must be location of .xsb file.
 const wchar_t SOUND_BANK[] = L"audio\\Win\\MySBank.xsb";
 
+const int GAME_SIZE = 190;
+
 
 #endif
 

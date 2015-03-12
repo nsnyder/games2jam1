@@ -18,6 +18,8 @@
 #include <d3dx9math.h>
 #include "constants.h"
 #include "audio.h"
+#include "Plane.h"
+#include "Ground.h"
 #include <sstream>
 
 class ColoredCubeApp : public D3DApp
@@ -41,6 +43,8 @@ private:
 	
 	Box mBox;
 	Axes mAxes;
+	Plane mPlane;
+	Ground theGround;
 
 	GameObject player;
 	GameObject obstacles[OBSTACLE_COUNT];
@@ -133,17 +137,10 @@ void ColoredCubeApp::initApp()
 	buildVertexLayouts();
 	srand(time(0));
 
-	//Play startup music
 	init_audio();
-	int tune = rand() % 2;
-	/*
-	if (tune == 0)
-		audio->playCue(THEME_MUSIC);
-	else if (tune == 1)
-		audio->playCue(THEME_MUSIC2);
-	*/
 
 	mBox.init(md3dDevice, mTech);
+	mPlane.init(md3dDevice, 1, D3DXCOLOR(.1, .5, .4, 1));
 	mAxes.init(md3dDevice, &mView, &mProj, mfxWVPVar, mTech);
 
 	player.init(&mBox, 1.0f, Vector3(0.0f, 0.0f, DEPTH/2.0f),Vector3(0.0f,0.0f,0.0f),2.0f, 1.0f);
@@ -156,6 +153,9 @@ void ColoredCubeApp::initApp()
 		obstacles[i].setMTech(mTech);
 	}
 
+	
+	theGround.init(&mPlane, 1, Vector3(0, 0, 0), Vector3(0, 0, 0), 0, 1);
+	theGround.setScale(GAME_SIZE);
 }
 
 void ColoredCubeApp::onResize()
@@ -173,8 +173,10 @@ void ColoredCubeApp::updateScene(float dt)
 	// Update angles based on input to orbit camera around box.
 	 if(GetAsyncKeyState('A') & 0x8000)	mTheta -= 2.0f*dt;
 	 if(GetAsyncKeyState('D') & 0x8000)	mTheta += 2.0f*dt;
-	 if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
-	 if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+	 //if(GetAsyncKeyState('W') & 0x8000)	mPhi -= 2.0f*dt;
+	 //if(GetAsyncKeyState('S') & 0x8000)	mPhi += 2.0f*dt;
+
+	 theGround.update(dt);
 
 	// make the camera look more into the distance
 	//mPhi = 1;
@@ -186,8 +188,11 @@ void ColoredCubeApp::updateScene(float dt)
 
 
 	// Restrict the angle mPhi. 
-	if( mPhi < 0.1f )	mPhi = 0.1f;
-	if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
+	//if( mPhi < 0.1f )	mPhi = 0.1f;
+	//if( mPhi > PI-0.1f)	mPhi = PI-0.1f;
+
+
+	if (mPhi != 0.1f) mPhi = 0.1f;
 
 	// Convert Spherical to Cartesian coordinates: mPhi measured from +y
 	// and mTheta measured counterclockwise from -z.
@@ -206,7 +211,7 @@ void ColoredCubeApp::drawScene()
 {
 	D3DApp::drawScene();
 
-	mClearColor = D3DXCOLOR(100.0f / 255.0f, 100.0f / 255.0f, 255.0f / 255.0f, 1.0f);
+	mClearColor = D3DXCOLOR(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f);
 
 	// Restore default states, input layout and primitive topology 
 	// because mFont->DrawText changes them.  Note that we can 
@@ -229,6 +234,10 @@ void ColoredCubeApp::drawScene()
 	//myObject.setMTech(mTech);
 	//myObject.draw();
 
+	mWVP = theGround.getWorldMatrix()  *mView*mProj;
+	mfxWVPVar->SetMatrix((float*)&mWVP);
+	theGround.setMTech(mTech);
+	theGround.draw();
 
 	// We specify DT_NOCLIP, so we do not care about width/height of the rect.
 	RECT R = {5, 5, 0, 0};
